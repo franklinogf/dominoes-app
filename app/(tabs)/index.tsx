@@ -4,7 +4,8 @@ import InputField from '../../components/InputField'
 import { useEffect, useState } from 'react'
 import Button from '../../components/Button'
 import ConfettiCannon from 'react-native-confetti-cannon'
-
+import dominoesIcon from '../../assets/dominoes-icon.png'
+import { Image } from 'expo-image'
 type Team = 'team1' | 'team2'
 type Score = number[]
 type TeamScore = Record<Team, Score>
@@ -105,7 +106,7 @@ export default function IndexPage() {
   const winner = team1Total >= limit ? 'team1' : team2Total >= limit ? 'team2' : undefined
 
   return (
-    <SafeAreaView className='bg-neutral-800 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))] flex-1'>
+    <SafeAreaView className='bg-neutral-800 flex-1'>
       {hasReachLimit &&
         [...Array(5)].map((_, index) => (
           <ConfettiCannon
@@ -117,7 +118,10 @@ export default function IndexPage() {
         ))}
       {!teamsCreated ? (
         <View className='w-full flex-1 justify-center items-center'>
-          <Text className='text-3xl font-bold my-6'>Nombres de los equipos</Text>
+          <View style={{ width: 100, height: 100 }}>
+            <Image source={dominoesIcon} contentFit='cover' style={{ flex: 1 }} />
+          </View>
+          <Text className='text-3xl font-bold my-6 text-white'>Nombres de los equipos</Text>
           <View className='space-y-5 w-[300px] px-2'>
             <View>
               <InputField

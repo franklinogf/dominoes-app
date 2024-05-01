@@ -7,18 +7,17 @@ import {
 } from 'react-native'
 import React from 'react'
 
+const sizeVariant = {
+  sm: 'px-1 py-1',
+  md: 'px-2 py-1',
+}
+
 interface Props extends TouchableOpacityProps {
   label: string
   style?: StyleProp<ViewStyle>
   className?: string
   size?: keyof typeof sizeVariant
   onPress?: () => void
-}
-const sizeVariant = {
-  sm: 'px-1 py-1',
-  md: 'px-2 py-1',
-  lg: 'px-8',
-  xl: 'py-2',
 }
 
 export default function Button({ label, style, size = 'md', ...props }: Props) {

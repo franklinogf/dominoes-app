@@ -9,7 +9,7 @@ interface Props {
 export default function InputField({ label, value, onChangeText, error }: Props) {
   return (
     <View className='space-y-2'>
-      <Text className='text-xl font-semibold'>{label}</Text>
+      <Text className='text-xl font-semibold text-white'>{label}</Text>
       <TextInput
         value={value}
         onChangeText={onChangeText}
