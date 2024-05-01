@@ -105,7 +105,7 @@ export default function IndexPage() {
   const winner = team1Total >= limit ? 'team1' : team2Total >= limit ? 'team2' : undefined
 
   return (
-    <SafeAreaView className='bg-primary-200 flex-1'>
+    <SafeAreaView className='bg-neutral-800 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))] flex-1'>
       {hasReachLimit &&
         [...Array(5)].map((_, index) => (
           <ConfettiCannon
@@ -143,10 +143,10 @@ export default function IndexPage() {
           </View>
         </View>
       ) : (
-        <View className='px-1 flex-1'>
+        <View className='px-1 flex-1 items-center'>
           <View className='my-2'>
             <View>
-              <Button onPress={endGame} className='py-2 bg-red-400' label='Terminar juego' />
+              <Button onPress={endGame} className='bg-red-500' size='sm' label='Terminar juego' />
             </View>
           </View>
           <View className='flex-row my-2 justify-center space-x-1'>
@@ -168,7 +168,7 @@ export default function IndexPage() {
             </View>
           </View>
           <ScrollView>
-            <View className='flex-row divide-x min-h-full'>
+            <View className='flex-row divide-x divide-white min-h-full'>
               <View className='w-1/2'>
                 {scores.team1.map((score, index) => (
                   <Button
@@ -197,12 +197,12 @@ export default function IndexPage() {
           </ScrollView>
           <View className='flex-row'>
             <Text
-              className={`${winner === 'team1' ? 'text-primary-700' : 'text-black/80'} font-bold text-2xl text-center w-1/2`}
+              className={`${winner === 'team1' ? 'text-primary-700' : 'text-black/80'} font-bold text-2xl text-center w-1/2 text-white pb-5`}
             >
               {team1Total}
             </Text>
             <Text
-              className={`${winner === 'team2' ? 'text-primary-700' : 'text-black/80'} font-bold text-2xl text-center w-1/2`}
+              className={`${winner === 'team2' ? 'text-primary-700' : 'text-black/80'} font-bold text-2xl text-center w-1/2 text-white pb-5`}
             >
               {team2Total}
             </Text>
