@@ -4,19 +4,28 @@ import { Tabs } from 'expo-router'
 
 export default function TabLayout() {
   return (
-    <Tabs screenOptions={{ tabBarActiveTintColor: 'blue', headerShown: false }}>
+    <Tabs
+      screenOptions={{
+        tabBarStyle: {
+          backgroundColor: '#dbf6ff',
+        },
+        tabBarActiveTintColor: '#002c45',
+        tabBarInactiveTintColor: 'gray',
+        headerShown: false,
+      }}
+    >
       <Tabs.Screen
         name='index'
         options={{
           title: 'Juego',
-          tabBarIcon: ({ color }) => <FontAwesome size={28} name='home' color={color} />,
+          tabBarIcon: ({ color }) => <FontAwesome size={28} name='gamepad' color={color} />,
         }}
       />
       <Tabs.Screen
         name='history'
         options={{
           title: 'Historial',
-          tabBarIcon: ({ color }) => <FontAwesome size={28} name='cog' color={color} />,
+          tabBarIcon: ({ color }) => <FontAwesome size={28} name='history' color={color} />,
         }}
       />
     </Tabs>
