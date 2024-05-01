@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 export default function HistoryPage() {
   return (
     <SafeAreaView style={styles.container}>
-      <Text>History</Text>
+      <Text className='text-3xl font-semibold text-white py-5'>Historial</Text>
     </SafeAreaView>
   )
 }
@@ -12,7 +12,7 @@ export default function HistoryPage() {
 const styles = StyleSheet.create({
   container: {
     minHeight: '100%',
-    backgroundColor: '#2f3aa2',
+    backgroundColor: '#262626',
     alignItems: 'center',
     // justifyContent: 'center',
   },
