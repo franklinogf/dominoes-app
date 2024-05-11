@@ -6,6 +6,7 @@ import Button from '../../components/Button'
 import ConfettiCannon from 'react-native-confetti-cannon'
 import dominoesIcon from '../../assets/dominoes-icon.png'
 import { Image } from 'expo-image'
+
 type Team = 'team1' | 'team2'
 type Score = number[]
 type TeamScore = Record<Team, Score>

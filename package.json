@@ -10,11 +10,14 @@
     "format": "prettier ./app/**/*.tsx --write"
   },
   "dependencies": {
+    "babel-plugin-inline-import": "^3.0.0",
+    "drizzle-orm": "^0.30.10",
     "expo": "^51.0.2",
     "expo-constants": "~16.0.1",
     "expo-image": "~1.12.9",
     "expo-linking": "~6.3.1",
     "expo-router": "~3.5.11",
+    "expo-sqlite": "~14.0.3",
     "expo-status-bar": "~1.12.1",
     "expo-system-ui": "~3.0.4",
     "nativewind": "^2.0.11",
@@ -28,6 +31,7 @@
     "@babel/core": "^7.20.0",
     "@types/react": "~18.2.45",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "drizzle-kit": "^0.21.1",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-config-standard-with-typescript": "^43.0.1",

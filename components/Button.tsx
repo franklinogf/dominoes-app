@@ -8,7 +8,7 @@ import {
 import React from 'react'
 
 const sizeVariant = {
-  sm: 'px-1 py-1',
+  sm: 'px-2 py-1',
   md: 'px-2 py-1',
 }
 
