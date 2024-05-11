@@ -10,19 +10,19 @@
     "format": "prettier ./app/**/*.tsx --write"
   },
   "dependencies": {
-    "expo": "~50.0.14",
-    "expo-constants": "~15.4.6",
-    "expo-linking": "~6.2.2",
-    "expo-router": "~3.4.10",
-    "expo-status-bar": "~1.11.1",
-    "expo-system-ui": "~2.9.4",
+    "expo": "^51.0.2",
+    "expo-constants": "~16.0.1",
+    "expo-image": "~1.12.9",
+    "expo-linking": "~6.3.1",
+    "expo-router": "~3.5.11",
+    "expo-status-bar": "~1.12.1",
+    "expo-system-ui": "~3.0.4",
     "nativewind": "^2.0.11",
     "react": "18.2.0",
-    "react-native": "0.73.6",
+    "react-native": "0.74.1",
     "react-native-confetti-cannon": "^1.5.2",
-    "react-native-safe-area-context": "4.8.2",
-    "react-native-screens": "~3.29.0",
-    "expo-image": "~1.10.6"
+    "react-native-safe-area-context": "4.10.1",
+    "react-native-screens": "3.31.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
@@ -37,7 +37,7 @@
     "eslint-plugin-react": "^7.34.1",
     "prettier": "3.2.5",
     "tailwindcss": "^3.3.2",
-    "typescript": "^5.4.5"
+    "typescript": "~5.3.3"
   },
   "private": true
 }
