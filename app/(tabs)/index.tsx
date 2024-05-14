@@ -46,13 +46,18 @@ export default function IndexPage() {
           setTeamsCreated(false)
           setHasReachLimit(false)
           const { team1, team2 } = teamsNames
-          insertNewGame({
-            winner: 'team1',
-            score1: sumScores(scores.team1),
-            score2: sumScores(scores.team2),
-            team1,
-            team2,
-          })
+          const score1 = sumScores(scores.team1)
+          const score2 = sumScores(scores.team2)
+
+          if (score1 > 0 || score2 > 0) {
+            insertNewGame({
+              winner: 'team1',
+              score1,
+              score2,
+              team1,
+              team2,
+            })
+          }
         },
       },
       {
