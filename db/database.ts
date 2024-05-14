@@ -7,7 +7,7 @@ export const db = drizzle(expoDb, { schema })
 
 type InsertGame = typeof schema.games.$inferInsert
 
-type NewGame = InsertGame
+type NewGame = Omit<InsertGame, 'date' | 'id'>
 
 export const insertNewGame = async ({ winner, team1, team2, score1, score2 }: NewGame) => {
   const gamesResult = await db.insert(schema.games).values({
