@@ -48,8 +48,8 @@ export default function IndexPage() {
           const { team1, team2 } = teamsNames
           insertNewGame({
             winner: 'team1',
-            score1: 50,
-            score2: 34,
+            score1: sumScores(scores.team1),
+            score2: sumScores(scores.team2),
             team1,
             team2,
           })
