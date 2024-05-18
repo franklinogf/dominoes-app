@@ -6,6 +6,7 @@ import Button from '../../components/Button'
 import ConfettiCannon from 'react-native-confetti-cannon'
 import dominoesIcon from '../../assets/dominoes-icon.png'
 import { Image } from 'expo-image'
+import { insertNewGame } from 'db/database'
 
 type Team = 'team1' | 'team2'
 type Score = number[]
@@ -44,6 +45,20 @@ export default function IndexPage() {
           setScores(initialTeamsScores)
           setTeamsCreated(false)
           setHasReachLimit(false)
+          const { team1, team2 } = teamsNames
+          const score1 = sumScores(scores.team1)
+          const score2 = sumScores(scores.team2)
+          const winner = score1 > score2 ? 'team1' : 'team2'
+
+          if (score1 > 0 || score2 > 0) {
+            insertNewGame({
+              winner,
+              score1,
+              score2,
+              team1,
+              team2,
+            })
+          }
         },
       },
       {

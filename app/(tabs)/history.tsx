@@ -44,10 +44,12 @@ export default function HistoryPage() {
                 {game.team1} VS {game.team2}
               </Text>
               <Text className='text-xl font-semibold '>Ganador: {game[game.winner]}</Text>
+              <Text className='text-xl font-semibold '>
+                Puntuación: {game.score1} VS {game.score2}
+              </Text>
               <Text className='text-xl font-semibold '>{new Date(game.date).toLocaleString()}</Text>
             </View>
             <View className='flex-row justify-end gap-x-3'>
-              <Button size='sm' label='Ver' />
               <Button
                 size='sm'
                 label='Borrar'
