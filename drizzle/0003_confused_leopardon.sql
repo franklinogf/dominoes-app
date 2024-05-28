@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS `games`
+
 CREATE TABLE `games` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`winner` text NOT NULL,

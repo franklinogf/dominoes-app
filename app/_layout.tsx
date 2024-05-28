@@ -6,7 +6,7 @@ import { useMigrations } from 'drizzle-orm/expo-sqlite/migrator'
 import migrations from '../drizzle/migrations'
 import { Text, View } from 'react-native'
 import { db } from 'db/database'
-
+import '../global.css'
 export default function AppLayout() {
   const { success, error } = useMigrations(db, migrations)
 

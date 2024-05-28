@@ -20,14 +20,9 @@ interface Props extends TouchableOpacityProps {
   onPress?: () => void
 }
 
-export default function Button({ label, style, size = 'md', ...props }: Props) {
+export default function Button({ label, className, size = 'md', ...props }: Props) {
   return (
-    <Pressable
-      activeOpacity={0.8}
-      style={style}
-      className={`bg-primary-400 rounded-lg ${sizeVariant[size]}`}
-      {...props}
-    >
+    <Pressable className={`bg-primary-500 rounded-lg ${className} ${sizeVariant[size]}`} {...props}>
       <Text className='text-center font-semibold text-lg text-white'>{label}</Text>
     </Pressable>
   )

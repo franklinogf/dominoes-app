@@ -30,7 +30,7 @@ export default function IndexPage() {
   const [teamsCreated, setTeamsCreated] = useState(false)
   const [scores, setScores] = useState(initialTeamsScores)
   const [hasReachLimit, setHasReachLimit] = useState(false)
-
+  // verifyInstallation()
   const startGame = () => {
     if (teamsNames.team1 === '' || teamsNames.team2 === '') return
     setTeamsCreated(true)
@@ -122,7 +122,7 @@ export default function IndexPage() {
   const winner = team1Total >= limit ? 'team1' : team2Total >= limit ? 'team2' : undefined
 
   return (
-    <SafeAreaView className='bg-neutral-800 flex-1'>
+    <SafeAreaView className='flex-1'>
       {hasReachLimit &&
         [...Array(5)].map((_, index) => (
           <ConfettiCannon
@@ -133,7 +133,7 @@ export default function IndexPage() {
           />
         ))}
       {!teamsCreated ? (
-        <View className='w-full flex-1 justify-center items-center'>
+        <View className='bg-neutral-700 w-full h-full justify-center items-center '>
           <View style={{ width: 100, height: 100 }}>
             <Image source={dominoesIcon} contentFit='cover' style={{ flex: 1 }} />
           </View>
