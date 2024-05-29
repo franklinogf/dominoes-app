@@ -1,19 +1,34 @@
-import { View, Text, TextInput } from 'react-native'
-import React from 'react'
-interface Props {
+import { type TextProps, View } from "react-native"
+import React from "react"
+import { Input } from "./ui/input"
+import { Label } from "./ui/label"
+import { cn } from "~/lib/utils"
+
+interface Props extends TextProps {
   label: string
   value: string
-  onChangeText: (value: string) => void
   error?: boolean
+  onChangeText: (value: string) => void
 }
-export default function InputField({ label, value, onChangeText, error }: Props) {
+export default function InputField({
+  label,
+  error = false,
+  className,
+  ...props
+}: Props) {
   return (
-    <View className='space-y-2'>
-      <Text className='text-xl font-semibold text-white'>{label}</Text>
-      <TextInput
-        value={value}
-        onChangeText={onChangeText}
-        className={`bg-primary-50 h-12 rounded-lg text-black text-xl px-2 border ${error != null && 'border-red-500'}`}
+    <View className="my-4">
+      <Label
+        nativeID={label}
+        className={cn("font-semibold mb-2", { "text-red-500": error })}
+      >
+        {label}
+      </Label>
+      <Input
+        {...props}
+        className={cn(className, { "border-red-500": error })}
+        aria-labelledbyledBy={label}
+        aria-errormessage="inputError"
       />
     </View>
   )

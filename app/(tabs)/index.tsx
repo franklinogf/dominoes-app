@@ -1,21 +1,16 @@
-import { Alert, ScrollView, Text, View } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import InputField from '../../components/InputField'
-import { useEffect, useState } from 'react'
-import Button from '../../components/Button'
-import ConfettiCannon from 'react-native-confetti-cannon'
-import dominoesIcon from '../../assets/dominoes-icon.png'
-import { Image } from 'expo-image'
-import { insertNewGame } from 'db/database'
-
-type Team = 'team1' | 'team2'
-type Score = number[]
-type TeamScore = Record<Team, Score>
-type Teams = Record<Team, string>
+import { Alert, ScrollView, View, SafeAreaView } from "react-native"
+import { useEffect, useState } from "react"
+import ConfettiCannon from "react-native-confetti-cannon"
+import { insertNewGame } from "db/database"
+import { Button } from "~/components/ui/button"
+import { Text } from "~/components/ui/text"
+import { InitialScreen } from "~/components/InitialScreen"
+import type { Team, TeamScore, Teams } from "~/lib/types"
+import { EndGameAlert } from "~/components/EndGameAlert"
 
 const initialTeamsNames: Teams = {
-  team1: 'Omar',
-  team2: 'Darwin',
+  team1: "Omar",
+  team2: "Darwin",
 }
 const initialTeamsScores: TeamScore = {
   team1: [],
@@ -32,75 +27,63 @@ export default function IndexPage() {
   const [hasReachLimit, setHasReachLimit] = useState(false)
   // verifyInstallation()
   const startGame = () => {
-    if (teamsNames.team1 === '' || teamsNames.team2 === '') return
+    if (teamsNames.team1 === "" || teamsNames.team2 === "") return
     setTeamsCreated(true)
   }
 
   const endGame = () => {
-    Alert.alert('Desea terminar la partida?', undefined, [
-      {
-        text: 'Terminar',
-        style: 'destructive',
-        onPress: () => {
-          setScores(initialTeamsScores)
-          setTeamsCreated(false)
-          setHasReachLimit(false)
-          const { team1, team2 } = teamsNames
-          const score1 = sumScores(scores.team1)
-          const score2 = sumScores(scores.team2)
-          const winner = score1 > score2 ? 'team1' : 'team2'
+    setScores(initialTeamsScores)
+    setTeamsCreated(false)
+    setHasReachLimit(false)
+    const { team1, team2 } = teamsNames
+    const score1 = sumScores(scores.team1)
+    const score2 = sumScores(scores.team2)
+    const winner = score1 > score2 ? "team1" : "team2"
 
-          if (score1 > 0 || score2 > 0) {
-            insertNewGame({
-              winner,
-              score1,
-              score2,
-              team1,
-              team2,
-            })
-          }
-        },
-      },
-      {
-        text: 'Cancelar',
-        style: 'cancel',
-      },
-    ])
+    if (score1 > 0 || score2 > 0) {
+      insertNewGame({
+        winner,
+        score1,
+        score2,
+        team1,
+        team2,
+      })
+    }
   }
 
   const addScore = (team: Team) => {
     Alert.prompt(
-      'Agregar puntos',
+      "Agregar puntos",
       undefined,
       [
         {
-          text: 'Cancelar',
-          style: 'cancel',
+          text: "Cancelar",
+          style: "cancel",
         },
         {
-          text: 'Agregar',
+          text: "Agregar",
           onPress(value) {
-            if (value == null || value === '') return
+            if (value == null || value === "") return
             const newScores = scores[team]
             newScores.push(parseInt(value))
             setScores({ ...scores, [team]: newScores })
           },
         },
       ],
-      'plain-text',
+      "plain-text",
       undefined,
-      'number-pad',
+      "number-pad",
       {
         cancelable: true,
-      }
+      },
     )
   }
 
   const removeScore = (team: Team, scoreIndex: number) => {
-    Alert.alert('Desea borrarlo?', undefined, [
+    Alert.alert("Desea borrarlo?", undefined, [
       {
-        text: 'Eliminar',
-        style: 'destructive',
+        text: "Eliminar",
+        style: "destructive",
         onPress: () => {
           const newScores = scores[team]
           newScores.splice(scoreIndex, 1)
@@ -108,8 +91,8 @@ export default function IndexPage() {
         },
       },
       {
-        text: 'Cancelar',
-        style: 'cancel',
+        text: "Cancelar",
+        style: "cancel",
       },
     ])
   }
@@ -119,10 +102,11 @@ export default function IndexPage() {
   useEffect(() => {
     setHasReachLimit(team1Total >= limit || team2Total >= limit)
   }, [team1Total, team2Total])
-  const winner = team1Total >= limit ? 'team1' : team2Total >= limit ? 'team2' : undefined
+  const winner =
+    team1Total >= limit ? "team1" : team2Total >= limit ? "team2" : undefined
 
   return (
-    <SafeAreaView className='flex-1'>
+    <SafeAreaView className="bg-background">
       {hasReachLimit &&
         [...Array(5)].map((_, index) => (
           <ConfettiCannon
@@ -133,96 +117,70 @@ export default function IndexPage() {
           />
         ))}
       {!teamsCreated ? (
-        <View className='bg-neutral-700 w-full h-full justify-center items-center '>
-          <View style={{ width: 100, height: 100 }}>
-            <Image source={dominoesIcon} contentFit='cover' style={{ flex: 1 }} />
-          </View>
-          <Text className='text-3xl font-bold my-6 text-white'>Nombres de los equipos</Text>
-          <View className='space-y-5 w-[300px] px-2'>
-            <View>
-              <InputField
-                label='Equipo 1'
-                value={teamsNames.team1}
-                onChangeText={(value) => {
-                  setTeamsNames({ ...teamsNames, team1: value })
-                }}
-              />
-            </View>
-            <View>
-              <InputField
-                label='Equipo 2'
-                value={teamsNames.team2}
-                onChangeText={(value) => {
-                  setTeamsNames({ ...teamsNames, team2: value })
-                }}
-              />
-            </View>
-            <View className='justify-center items-center'>
-              <Button label='Continuar' onPress={startGame} />
-            </View>
-          </View>
-        </View>
+        <InitialScreen
+          startGame={startGame}
+          setTeamsNames={setTeamsNames}
+          teamsNames={teamsNames}
+        />
       ) : (
-        <View className='px-1 flex-1 items-center'>
-          <View className='my-2'>
-            <View>
-              <Button onPress={endGame} className='bg-red-500' size='sm' label='Terminar juego' />
-            </View>
+        <View className="px-1 flex-1 items-center">
+          <View className="my-2">
+            <EndGameAlert endGame={endGame} />
           </View>
-          <View className='flex-row my-2 justify-center space-x-1'>
-            <View className='w-1/2'>
-              <Button
+          <View className="flex-row my-2 justify-center space-x-1">
+            <View className="w-1/2">
+              {/* <Button
                 onPress={() => {
-                  addScore('team1')
+                  addScore("team1")
                 }}
                 label={teamsNames.team1}
-              />
+              /> */}
             </View>
-            <View className='w-1/2'>
-              <Button
+            <View className="w-1/2">
+              {/* <Button
                 onPress={() => {
-                  addScore('team2')
+                  addScore("team2")
                 }}
                 label={teamsNames.team2}
-              />
+              /> */}
             </View>
           </View>
           <ScrollView>
-            <View className='flex-row divide-x divide-white min-h-full'>
-              <View className='w-1/2'>
-                {scores.team1.map((score, index) => (
+            <View className="flex-row divide-x divide-white min-h-full">
+              <View className="w-1/2">
+                {/* {scores.team1.map((score, index) => (
                   <Button
                     onLongPress={() => {
-                      removeScore('team1', index)
+                      removeScore("team1", index)
                     }}
                     key={`team1-${index}`}
                     label={score.toString()}
-                    className='mb-2 py-1 bg-transparent'
+                    className="mb-2 py-1 bg-transparent"
                   />
-                ))}
+                ))} */}
               </View>
-              <View className='w-1/2'>
-                {scores.team2.map((score, index) => (
+              <View className="w-1/2">
+                {/* {scores.team2.map((score, index) => (
                   <Button
                     onLongPress={() => {
-                      removeScore('team2', index)
+                      removeScore("team2", index)
                     }}
                     key={`team2-${index}`}
                     label={score.toString()}
-                    className='mb-2 py-1 bg-transparent'
+                    className="mb-2 py-1 bg-transparent"
                   />
-                ))}
+                ))} */}
               </View>
             </View>
           </ScrollView>
-          <View className='flex-row'>
+          <View className="flex-row">
             <Text
-              className={`${winner === 'team1' ? 'text-primary-700' : 'text-black/80'} font-bold text-2xl text-center w-1/2 text-white pb-5`}
+              className={`${winner === "team1" ? "text-primary-700" : "text-black/80"} font-bold text-2xl text-center w-1/2 text-white pb-5`}
             >
               {team1Total}
             </Text>
             <Text
-              className={`${winner === 'team2' ? 'text-primary-700' : 'text-black/80'} font-bold text-2xl text-center w-1/2 text-white pb-5`}
+              className={`${winner === "team2" ? "text-primary-700" : "text-black/80"} font-bold text-2xl text-center w-1/2 text-white pb-5`}
             >
               {team2Total}
             </Text>

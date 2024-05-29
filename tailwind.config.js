@@ -1,40 +1,51 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { hairlineWidth } = require("nativewind/theme")
 /** @type {import('tailwindcss').Config} */
-module.exports ={
+module.exports = {
   darkMode: "class",
   content: ["./app/**/*.{js,jsx,ts,tsx}", "./components/**/*.{js,jsx,ts,tsx}"],
   presets: [require("nativewind/preset")],
-  theme: {   
+  theme: {
     extend: {
       colors: {
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
         primary: {
-          50: '#eff9ff',
-          100: '#dff1ff',
-          200: '#b8e5ff',
-          300: '#78d2ff',
-          400: '#31bbff',
-          500: '#06a1ef',
-          600: '#0081ce',
-          700: '#0067a7',
-          800: '#02578a',
-          900: '#084872',
-          950: '#062d4b',
-      },
-      
-        red: {
-          '50': '#fff0f0',
-        '100': '#ffdddd',
-        '200': '#ffc0c0',
-        '300': '#ff9494',
-        '400': '#ff5757',
-        '500': '#ff2323',
-        '600': '#ff0000',
-        '700': '#d70000',
-        '800': '#b10303',
-        '900': '#920a0a',
-        '950': '#500000',
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
         },
-      }
+        secondary: {
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
+        },
+        destructive: {
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
+        },
+        muted: {
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
+        },
+        accent: {
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
+        },
+        popover: {
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
+        },
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
+        },
+      },
+      borderWidth: {
+        hairline: hairlineWidth(),
+      },
     },
   },
   plugins: [],
-};
+}
