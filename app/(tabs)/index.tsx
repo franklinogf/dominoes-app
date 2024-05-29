@@ -7,6 +7,7 @@ import { Text } from "~/components/ui/text"
 import { InitialScreen } from "~/components/InitialScreen"
 import type { Team, TeamScore, Teams } from "~/lib/types"
 import { EndGameAlert } from "~/components/EndGameAlert"
+import { Separator } from "~/components/ui/separator"
 
 const initialTeamsNames: Teams = {
   team1: "Omar",
@@ -123,56 +124,68 @@ export default function IndexPage() {
           teamsNames={teamsNames}
         />
       ) : (
-        <View className="px-1 flex-1 items-center">
-          <View className="my-2">
+        <View className="h-full items-center">
+          <View className="mt-2">
             <EndGameAlert endGame={endGame} />
           </View>
-          <View className="flex-row my-2 justify-center space-x-1">
-            <View className="w-1/2">
-              {/* <Button
-                onPress={() => {
-                  addScore("team1")
-                }}
-                label={teamsNames.team1}
-              /> */}
-            </View>
-            <View className="w-1/2">
-              {/* <Button
-                onPress={() => {
-                  addScore("team2")
-                }}
-                label={teamsNames.team2}
-              /> */}
-            </View>
+          <Separator className="my-4" />
+          <View className="flex-row w-full justify-between px-1.5">
+            <Button
+              className="w-[200px]"
+              onPress={() => {
+                addScore("team1")
+              }}
+            >
+              <Text>{teamsNames.team1}</Text>
+            </Button>
+            <Button
+              className="w-[200px]"
+              onPress={() => {
+                addScore("team2")
+              }}
+            >
+              <Text>{teamsNames.team2}</Text>
+            </Button>
           </View>
-          <ScrollView>
-            <View className="flex-row divide-x divide-white min-h-full">
-              <View className="w-1/2">
-                {/* {scores.team1.map((score, index) => (
-                  <Button
-                    onLongPress={() => {
-                      removeScore("team1", index)
-                    }}
-                    key={`team1-${index}`}
-                    label={score.toString()}
-                    className="mb-2 py-1 bg-transparent"
-                  />
-                ))} */}
-              </View>
-              <View className="w-1/2">
-                {/* {scores.team2.map((score, index) => (
-                  <Button
-                    onLongPress={() => {
-                      removeScore("team2", index)
-                    }}
-                    key={`team2-${index}`}
-                    label={score.toString()}
-                    className="mb-2 py-1 bg-transparent"
-                  />
-                ))} */}
-              </View>
+          <Separator className="my-4" />
+          <ScrollView
+            className="px-1.5 w-full"
+            contentContainerClassName="justify-between  flex-row"
+          >
+            <View className="w-[200px] gap-2">
+              {scores.team1.map((score, index) => (
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onPress={() => {
+                    removeScore("team1", index)
+                  }}
+                  key={`team1-${index}`}
+                >
+                  <Text>{score.toString()}</Text>
+                </Button>
+              ))}
             </View>
+            <Separator orientation="vertical" />
+            <View className="w-[200px]">
+              {scores.team2.map((score, index) => (
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onPress={() => {
+                    removeScore("team2", index)
+                  }}
+                  key={`team2-${index}`}
+                >
+                  <Text>{score.toString()}</Text>
+                </Button>
+              ))}
+            </View>
+            {/* <View className="flex-row divide-x divide-white min-h-full">
+             
+            </View> */}
           </ScrollView>
+          <Separator className="my-4" />
           <View className="flex-row">
             <Text
               className={`${winner === "team1" ? "text-primary-700" : "text-black/80"} font-bold text-2xl text-center w-1/2 text-white pb-5`}
