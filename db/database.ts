@@ -28,7 +28,9 @@ export const insertNewGame = async ({
 }
 
 export const getAllGames = async () => {
-  const result = await db.query.games.findMany()
+  const result = await db.query.games.findMany({
+    orderBy: (games, { desc }) => [desc(games.date)],
+  })
   return result
 }
 

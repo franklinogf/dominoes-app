@@ -1,71 +1,92 @@
-import Button from "components/Button"
 import { deleteGame, getAllGames } from "db/database"
-import { type games } from "db/schema"
+// import { type games } from "db/schema"
 import { useEffect, useState } from "react"
-import { FlatList, Text, View } from "react-native"
+import { FlatList } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
+import { H1 } from "~/components/ui/typography"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card"
+import { Text } from "~/components/ui/text"
+import { Trash } from "~/lib/icons/Trash"
+import { ConfirmationAlert } from "~/components/ConfirmationAlert"
+import { type games } from "~/db/schema"
+import { usePathname } from "expo-router"
 type SelectGame = typeof games.$inferSelect
 
 type Game = SelectGame
 export default function HistoryPage() {
+  const pathname = usePathname()
   const [games, setGames] = useState<Game[]>([])
 
-  const getGames = () => {
-    getAllGames()
-      .then((result) => {
-        setGames(result)
-      })
-      .catch((e) => {
-        console.log(e)
-      })
+  const getGames = async () => {
+    const result = await getAllGames()
+    setGames(result)
   }
+
   useEffect(() => {
-    getGames()
-  }, [])
+    if (pathname === "/history") {
+      getGames()
+    }
+  }, [pathname])
 
   const deleteGameFromHistory = async (gameId: number) => {
     await deleteGame({ gameId })
     getGames()
   }
   return (
-    <SafeAreaView className="bg-neutral-800 flex-1">
-      <Text className="text-3xl font-semibold text-white py-5 text-center">
-        Historial
-      </Text>
-
+    <SafeAreaView className="pb-[400px]">
+      <H1 className="text-center my-5 text-foreground">Historial</H1>
       <FlatList
+        bounces={false}
         data={games}
-        contentContainerStyle={{
-          gap: 10,
-          paddingBottom: 20,
-        }}
+        contentContainerClassName="gap-4 p-3 pb-20"
         renderItem={({ item: game }) => (
-          <View key={game.id} className="bg-white p-2">
-            <View>
-              <Text className="text-xl font-semibold ">
+          <Card key={game.id} className="w-full">
+            <CardHeader>
+              <CardTitle className="text-center">
                 {game.team1} VS {game.team2}
-              </Text>
-              <Text className="text-xl font-semibold ">
+              </CardTitle>
+              <CardDescription className="text-center text-lg">
+                {new Date(game.date).toLocaleString()}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Text className="text-xl font-semibold text-center">
                 Ganador: {game[game.winner]}
               </Text>
-              <Text className="text-xl font-semibold ">
-                Puntuación: {game.score1} VS {game.score2}
+              <Text className="text-xl font-semibold text-center">
+                Puntuación: {game.score1} - {game.score2}
               </Text>
-              <Text className="text-xl font-semibold ">
-                {new Date(game.date).toLocaleString()}
-              </Text>
-            </View>
-            <View className="flex-row justify-end gap-x-3">
-              <Button
-                size="sm"
-                label="Borrar"
-                className="bg-red-400"
-                onPress={() => {
+            </CardContent>
+            <CardFooter>
+              <ConfirmationAlert
+                buttonText="Borrar"
+                buttonIcon={<Trash className="stroke-white" />}
+                buttonFullWitdh
+                message="Seguro que quiere eliminarlo del historial?"
+                actionAcceptText="Borrar"
+                actionAccept={() => {
                   deleteGameFromHistory(game.id)
                 }}
               />
-            </View>
-          </View>
+              {/* <Button
+                className="w-full"
+                size="sm"
+                variant="destructive"
+                onPress={() => {
+                  deleteGameFromHistory(game.id)
+                }}
+              >
+                
+              </Button> */}
+            </CardFooter>
+          </Card>
         )}
       />
     </SafeAreaView>

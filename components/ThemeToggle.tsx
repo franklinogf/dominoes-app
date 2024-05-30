@@ -20,7 +20,7 @@ export function ThemeToggle() {
       {({ pressed }) => (
         <View
           className={cn(
-            "flex-1 aspect-square pt-0.5 justify-center items-start",
+            "aspect-square pt-0.5 justify-center items-start",
             pressed && "opacity-70",
           )}
         >

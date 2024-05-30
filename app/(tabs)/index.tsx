@@ -1,13 +1,14 @@
-import { Alert, ScrollView, View, SafeAreaView } from "react-native"
+import { ScrollView, View, SafeAreaView } from "react-native"
 import { useEffect, useState } from "react"
 import ConfettiCannon from "react-native-confetti-cannon"
 import { insertNewGame } from "db/database"
-import { Button } from "~/components/ui/button"
 import { Text } from "~/components/ui/text"
 import { InitialScreen } from "~/components/InitialScreen"
 import type { Team, TeamScore, Teams } from "~/lib/types"
-import { EndGameAlert } from "~/components/EndGameAlert"
+import { ConfirmationAlert } from "~/components/ConfirmationAlert"
 import { Separator } from "~/components/ui/separator"
+import { InputDialog } from "~/components/InputDialog"
+import { ThemeToggle } from "~/components/ThemeToggle"
 
 const initialTeamsNames: Teams = {
   team1: "Omar",
@@ -26,6 +27,7 @@ export default function IndexPage() {
   const [teamsCreated, setTeamsCreated] = useState(false)
   const [scores, setScores] = useState(initialTeamsScores)
   const [hasReachLimit, setHasReachLimit] = useState(false)
+  const [value, setValue] = useState("")
   // verifyInstallation()
   const startGame = () => {
     if (teamsNames.team1 === "" || teamsNames.team2 === "") return
@@ -53,49 +55,17 @@ export default function IndexPage() {
   }
 
   const addScore = (team: Team) => {
-    Alert.prompt(
-      "Agregar puntos",
-      undefined,
-      [
-        {
-          text: "Cancelar",
-          style: "cancel",
-        },
-        {
-          text: "Agregar",
-          onPress(value) {
-            if (value == null || value === "") return
-            const newScores = scores[team]
-            newScores.push(parseInt(value))
-            setScores({ ...scores, [team]: newScores })
-          },
-        },
-      ],
-      "plain-text",
-      undefined,
-      "number-pad",
-      {
-        cancelable: true,
-      },
-    )
+    if (value == null || value === "") return
+    const newScores = scores[team]
+    newScores.push(parseInt(value))
+    setScores({ ...scores, [team]: newScores })
+    setValue("")
   }
 
   const removeScore = (team: Team, scoreIndex: number) => {
-    Alert.alert("Desea borrarlo?", undefined, [
-      {
-        text: "Eliminar",
-        style: "destructive",
-        onPress: () => {
-          const newScores = scores[team]
-          newScores.splice(scoreIndex, 1)
-          setScores({ ...scores, [team]: newScores })
-        },
-      },
-      {
-        text: "Cancelar",
-        style: "cancel",
-      },
-    ])
+    const newScores = scores[team]
+    newScores.splice(scoreIndex, 1)
+    setScores({ ...scores, [team]: newScores })
   }
   const team1Total = sumScores(scores.team1)
   const team2Total = sumScores(scores.team2)
@@ -107,7 +77,7 @@ export default function IndexPage() {
     team1Total >= limit ? "team1" : team2Total >= limit ? "team2" : undefined
 
   return (
-    <SafeAreaView className="bg-background">
+    <SafeAreaView>
       {hasReachLimit &&
         [...Array(5)].map((_, index) => (
           <ConfettiCannon
@@ -125,27 +95,38 @@ export default function IndexPage() {
         />
       ) : (
         <View className="h-full items-center">
-          <View className="mt-2">
-            <EndGameAlert endGame={endGame} />
+          <View className="mt-2 w-full flex-row items-center justify-center">
+            <ConfirmationAlert
+              message="Seguro que desea terminar este juego?"
+              actionAcceptText="Terminar"
+              buttonText="Terminar juego"
+              actionAccept={endGame}
+            />
+
+            <View className="ml-5">
+              <ThemeToggle />
+            </View>
           </View>
           <Separator className="my-4" />
           <View className="flex-row w-full justify-between px-1.5">
-            <Button
-              className="w-[200px]"
-              onPress={() => {
+            <InputDialog
+              limit={limit}
+              value={value}
+              onValueChange={setValue}
+              buttonText={teamsNames.team1}
+              actionAccept={() => {
                 addScore("team1")
               }}
-            >
-              <Text>{teamsNames.team1}</Text>
-            </Button>
-            <Button
-              className="w-[200px]"
-              onPress={() => {
+            />
+            <InputDialog
+              limit={limit}
+              value={value}
+              onValueChange={setValue}
+              buttonText={teamsNames.team2}
+              actionAccept={() => {
                 addScore("team2")
               }}
-            >
-              <Text>{teamsNames.team2}</Text>
-            </Button>
+            />
           </View>
           <Separator className="my-4" />
           <ScrollView
@@ -154,31 +135,33 @@ export default function IndexPage() {
           >
             <View className="w-[200px] gap-2">
               {scores.team1.map((score, index) => (
-                <Button
-                  variant="outline"
-                  size="lg"
-                  onPress={() => {
+                <ConfirmationAlert
+                  buttonVariant="outline"
+                  buttonSize="lg"
+                  key={`team1-${index}`}
+                  message="Desea borrarlo?"
+                  actionAcceptText="Borrar"
+                  buttonText={score.toString()}
+                  actionAccept={() => {
                     removeScore("team1", index)
                   }}
-                  key={`team1-${index}`}
-                >
-                  <Text>{score.toString()}</Text>
-                </Button>
+                />
               ))}
             </View>
             <Separator orientation="vertical" />
             <View className="w-[200px]">
               {scores.team2.map((score, index) => (
-                <Button
-                  variant="outline"
-                  size="lg"
-                  onPress={() => {
+                <ConfirmationAlert
+                  buttonVariant="outline"
+                  buttonSize="lg"
+                  key={`team2-${index}`}
+                  message="Desea borrarlo?"
+                  actionAcceptText="Borrar"
+                  buttonText={score.toString()}
+                  actionAccept={() => {
                     removeScore("team2", index)
                   }}
-                  key={`team2-${index}`}
-                >
-                  <Text>{score.toString()}</Text>
-                </Button>
+                />
               ))}
             </View>
             {/* <View className="flex-row divide-x divide-white min-h-full">
