@@ -50,6 +50,8 @@ export function InputDialog({
         </AlertDialogHeader>
         <View>
           <InputField
+            contextMenuHidden={true}
+            autoFocus={true}
             maxLength={3}
             keyboardType="number-pad"
             value={value}
