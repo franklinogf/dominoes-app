@@ -16,11 +16,9 @@ export default function TabLayout() {
               : NAV_THEME.light.primary,
           },
           tabBarActiveTintColor: isDarkColorScheme
-            ? NAV_THEME.dark.text
-            : NAV_THEME.light.text,
-          tabBarInactiveTintColor: isDarkColorScheme
-            ? NAV_THEME.dark.card
-            : NAV_THEME.light.card,
+            ? NAV_THEME.dark.border
+            : NAV_THEME.light.border,
+          tabBarInactiveTintColor: isDarkColorScheme ? "gray" : "gray",
           headerShown: false,
         }}
       >
