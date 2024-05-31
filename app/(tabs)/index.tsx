@@ -2,13 +2,14 @@ import { ScrollView, View, SafeAreaView } from "react-native"
 import { useEffect, useState } from "react"
 import ConfettiCannon from "react-native-confetti-cannon"
 import { insertNewGame } from "db/database"
-import { Text } from "~/components/ui/text"
 import { InitialScreen } from "~/components/InitialScreen"
 import type { Team, TeamScore, Teams } from "~/lib/types"
 import { ConfirmationAlert } from "~/components/ConfirmationAlert"
 import { Separator } from "~/components/ui/separator"
 import { InputDialog } from "~/components/InputDialog"
 import { ThemeToggle } from "~/components/ThemeToggle"
+import { cn } from "~/lib/utils"
+import { H1 } from "~/components/ui/typography"
 
 const initialTeamsNames: Teams = {
   team1: "Omar",
@@ -27,8 +28,8 @@ export default function IndexPage() {
   const [teamsCreated, setTeamsCreated] = useState(false)
   const [scores, setScores] = useState(initialTeamsScores)
   const [hasReachLimit, setHasReachLimit] = useState(false)
-  const [value, setValue] = useState("")
-  // verifyInstallation()
+  const [newScore, setNewScore] = useState("")
+
   const startGame = () => {
     if (teamsNames.team1 === "" || teamsNames.team2 === "") return
     setTeamsCreated(true)
@@ -55,11 +56,11 @@ export default function IndexPage() {
   }
 
   const addScore = (team: Team) => {
-    if (value == null || value === "") return
+    if (newScore == null || newScore === "") return
     const newScores = scores[team]
-    newScores.push(parseInt(value))
+    newScores.push(parseInt(newScore))
     setScores({ ...scores, [team]: newScores })
-    setValue("")
+    setNewScore("")
   }
 
   const removeScore = (team: Team, scoreIndex: number) => {
@@ -111,8 +112,8 @@ export default function IndexPage() {
           <View className="flex-row w-full justify-between px-1.5">
             <InputDialog
               limit={limit}
-              value={value}
-              onValueChange={setValue}
+              value={newScore}
+              onValueChange={setNewScore}
               buttonText={teamsNames.team1}
               actionAccept={() => {
                 addScore("team1")
@@ -120,8 +121,8 @@ export default function IndexPage() {
             />
             <InputDialog
               limit={limit}
-              value={value}
-              onValueChange={setValue}
+              value={newScore}
+              onValueChange={setNewScore}
               buttonText={teamsNames.team2}
               actionAccept={() => {
                 addScore("team2")
@@ -130,8 +131,9 @@ export default function IndexPage() {
           </View>
           <Separator className="my-4" />
           <ScrollView
+            bounces={false}
             className="px-1.5 w-full"
-            contentContainerClassName="justify-between  flex-row"
+            contentContainerClassName="justify-between flex-row"
           >
             <View className="w-[200px] gap-2">
               {scores.team1.map((score, index) => (
@@ -164,22 +166,24 @@ export default function IndexPage() {
                 />
               ))}
             </View>
-            {/* <View className="flex-row divide-x divide-white min-h-full">
-             
-            </View> */}
           </ScrollView>
           <Separator className="my-4" />
-          <View className="flex-row">
-            <Text
-              className={`${winner === "team1" ? "text-primary-700" : "text-black/80"} font-bold text-2xl text-center w-1/2 text-white pb-5`}
+          <View className="flex-row w-full justify-between px-1.5">
+            <H1
+              className={cn("text-center w-1/2 p-2", {
+                "text-primary": winner === "team1",
+              })}
             >
               {team1Total}
-            </Text>
-            <Text
-              className={`${winner === "team2" ? "text-primary-700" : "text-black/80"} font-bold text-2xl text-center w-1/2 text-white pb-5`}
+            </H1>
+
+            <H1
+              className={cn("text-center w-1/2 p-2", {
+                "text-primary": winner === "team2",
+              })}
             >
               {team2Total}
-            </Text>
+            </H1>
           </View>
         </View>
       )}
