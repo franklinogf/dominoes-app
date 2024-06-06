@@ -3,8 +3,10 @@ import { Image } from "expo-image"
 import { Text } from "./ui/text"
 import InputField from "./InputField"
 import { Button } from "./ui/button"
-import dominoesIcon from "~/assets/dominoes-icon.png"
+import lightIcon from "~/assets/dominoes-icon-light.png"
+import darkicon from "../assets/dominoes-icon-dark.png"
 import type { Teams } from "~/lib/types"
+import { useColorScheme } from "~/lib/useColorScheme"
 
 interface InitialScreenProps {
   startGame: () => void
@@ -16,6 +18,8 @@ export function InitialScreen({
   teamsNames,
   setTeamsNames,
 }: InitialScreenProps) {
+  const { isDarkColorScheme } = useColorScheme()
+  const dominoesIcon = isDarkColorScheme ? lightIcon : darkicon
   return (
     <View className="w-full h-full justify-center items-center ">
       <View style={{ width: 100, height: 100 }}>
