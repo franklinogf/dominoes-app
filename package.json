@@ -49,6 +49,7 @@
     "eslint-plugin-n": "^16.6.2",
     "eslint-plugin-promise": "^6.2.0",
     "eslint-plugin-react": "^7.34.2",
+    "expo-drizzle-studio-plugin": "^0.0.2",
     "prettier": "^3.2.5",
     "typescript": "~5.3.3"
   },

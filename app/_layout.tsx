@@ -2,7 +2,7 @@ import { StatusBar } from "expo-status-bar"
 import { useMigrations } from "drizzle-orm/expo-sqlite/migrator"
 import migrations from "../drizzle/migrations"
 import { Platform, Text, View } from "react-native"
-import { db } from "db/database"
+import { db, expoDb } from "db/database"
 import { type Theme, ThemeProvider } from "@react-navigation/native"
 import "~/global.css"
 import { NAV_THEME } from "~/lib/constants"
@@ -11,6 +11,7 @@ import { useEffect, useState } from "react"
 import { useColorScheme } from "~/lib/useColorScheme"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { PortalHost } from "~/components/primitives/portal"
+import { useDrizzleStudio } from "expo-drizzle-studio-plugin"
 
 const LIGHT_THEME: Theme = {
   dark: false,
@@ -26,6 +27,7 @@ export {
 } from "expo-router"
 SplashScreen.preventAutoHideAsync()
 export default function AppLayout() {
+  useDrizzleStudio(expoDb)
   const { success, error } = useMigrations(db, migrations)
   const { colorScheme, setColorScheme, isDarkColorScheme } = useColorScheme()
   const [isColorSchemeLoaded, setIsColorSchemeLoaded] = useState(false)

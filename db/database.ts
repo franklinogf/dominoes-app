@@ -2,7 +2,7 @@ import { drizzle } from "drizzle-orm/expo-sqlite"
 import * as schema from "./schema"
 import { openDatabaseSync } from "expo-sqlite/next"
 import { eq } from "drizzle-orm"
-const expoDb = openDatabaseSync("db.db")
+export const expoDb = openDatabaseSync("db.db")
 export const db = drizzle(expoDb, { schema })
 
 type InsertGame = typeof schema.games.$inferInsert
