@@ -15,25 +15,49 @@ import { useColorScheme } from "~/lib/useColorScheme"
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group"
 import { Label } from "./ui/label"
 import { useRef } from "react"
+import { Controller, useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { z } from "zod"
+
+const formSchema = z.object({
+  team1: z.string().min(1).max(50),
+  team2: z.string().max(50),
+  limit: z.string(),
+})
 
 interface InitialScreenProps {
-  startGame: () => void
+  startGame: ({
+    team1,
+    team2,
+    limit,
+  }: {
+    team1: string
+    team2: string
+    limit: string
+  }) => void
   teamsNames: Teams
-  setTeamsNames: React.Dispatch<React.SetStateAction<Teams>>
   limit: string
-  setLimit: React.Dispatch<React.SetStateAction<string>>
 }
+
 export function InitialScreen({
   startGame,
   teamsNames,
-  setTeamsNames,
   limit,
-  setLimit,
 }: InitialScreenProps) {
   const { isDarkColorScheme } = useColorScheme()
   const dominoesIcon = isDarkColorScheme ? lightIcon : darkicon
   const team2InputRef = useRef<TextInput>(null)
-
+  const { control, handleSubmit } = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      team1: teamsNames.team1,
+      team2: teamsNames.team2,
+      limit: limit || "200",
+    },
+  })
+  function onSubmit(data: z.infer<typeof formSchema>) {
+    startGame({ team1: data.team1, team2: data.team2, limit: data.limit })
+  }
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View className="h-full justify-center items-center ">
@@ -43,18 +67,13 @@ export function InitialScreen({
         <Text className="text-3xl font-bold my-10">Nombres de los equipos</Text>
         <View className="w-[300px]">
           <InputField
+            control={control}
+            name="team1"
             returnKeyType="next"
             autoFocus
             maxLength={50}
             autoCapitalize="words"
             label="Equipo 1"
-            value={teamsNames.team1}
-            onChangeText={(value) => {
-              setTeamsNames({
-                ...teamsNames,
-                team1: value,
-              })
-            }}
             onSubmitEditing={() => {
               if (team2InputRef.current) {
                 team2InputRef.current.focus()
@@ -62,36 +81,47 @@ export function InitialScreen({
             }}
             blurOnSubmit={false}
           />
-
           <InputField
-            ref={team2InputRef}
-            returnKeyType="done"
+            control={control}
+            name="team2"
+            returnKeyType="next"
+            autoFocus
             maxLength={50}
             autoCapitalize="words"
             label="Equipo 2"
-            value={teamsNames.team2}
-            onChangeText={(value) => {
-              setTeamsNames({
-                ...teamsNames,
-                team2: value,
-              })
-            }}
+            // ref={team2InputRef}
+            blurOnSubmit={false}
           />
 
           <View className="my-4">
             <Text className="mb-4">Selecciona el limite de la partida</Text>
-            <RadioGroup
-              value={limit}
-              onValueChange={setLimit}
-              className="w-full flex-row justify-around"
-            >
-              <RadioGroupItemWithLabel value="200" onLabelPress={setLimit} />
-              <RadioGroupItemWithLabel value="150" onLabelPress={setLimit} />
-              <RadioGroupItemWithLabel value="100" onLabelPress={setLimit} />
-            </RadioGroup>
+            <Controller
+              control={control}
+              name="limit"
+              render={({ field: { value, onChange } }) => (
+                <RadioGroup
+                  value={value}
+                  onValueChange={onChange}
+                  className="w-full flex-row justify-around"
+                >
+                  <RadioGroupItemWithLabel
+                    value="200"
+                    onLabelPress={onChange}
+                  />
+                  <RadioGroupItemWithLabel
+                    value="150"
+                    onLabelPress={onChange}
+                  />
+                  <RadioGroupItemWithLabel
+                    value="100"
+                    onLabelPress={onChange}
+                  />
+                </RadioGroup>
+              )}
+            />
           </View>
 
-          <Button className="w-full" size="lg" onPress={startGame}>
+          <Button className="w-full" size="lg" onPress={handleSubmit(onSubmit)}>
             <Text>Continuar</Text>
           </Button>
         </View>

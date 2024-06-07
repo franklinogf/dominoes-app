@@ -27,10 +27,19 @@ export default function IndexPage() {
   const [teamsCreated, setTeamsCreated] = useState(false)
   const [scores, setScores] = useState(initialTeamsScores)
   const [newScore, setNewScore] = useState("")
-  const [limit, setLimit] = useState("200")
+  const [limit, setLimit] = useState("")
 
-  const startGame = () => {
-    if (teamsNames.team1 === "" || teamsNames.team2 === "") return
+  const startGame = ({
+    team1,
+    team2,
+    limit,
+  }: {
+    team1: string
+    team2: string
+    limit: string
+  }) => {
+    setTeamsNames({ team1, team2 })
+    setLimit(limit)
     setTeamsCreated(true)
   }
 
@@ -92,10 +101,8 @@ export default function IndexPage() {
       {!teamsCreated ? (
         <InitialScreen
           startGame={startGame}
-          setTeamsNames={setTeamsNames}
           teamsNames={teamsNames}
           limit={limit}
-          setLimit={setLimit}
         />
       ) : (
         <View className="h-full items-center mt-2">
