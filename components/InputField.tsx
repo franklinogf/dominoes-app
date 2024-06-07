@@ -1,35 +1,110 @@
-import { type TextInput, View, type TextInputProps } from "react-native"
+import { View, type TextInputProps } from "react-native"
 import * as React from "react"
 import { Input } from "./ui/input"
 import { Label } from "./ui/label"
 import { cn } from "~/lib/utils"
+import {
+  type Control,
+  Controller,
+  type Path,
+  type FieldValues,
+} from "react-hook-form"
+import { Small } from "./ui/typography"
 
-interface Props extends TextInputProps {
+interface InputFieldProps<TFormValues extends FieldValues>
+  extends TextInputProps {
   label?: string
-  value: string
-  error?: boolean
-  onChangeText: (value: string) => void
+  className?: string
+  control: Control<TFormValues>
+  name: Path<TFormValues>
 }
-const InputField = React.forwardRef<React.ElementRef<typeof TextInput>, Props>(
-  ({ label, error = false, className, ...props }, ref) => {
-    return (
-      <View className="my-4">
-        {label && (
-          <Label
-            nativeID={label}
-            className={cn("font-semibold mb-2", { "text-red-500": error })}
-          >
-            {label}
-          </Label>
-        )}
-        <Input
-          ref={ref}
-          {...props}
-          className={cn(className, { "border-red-500": error })}
-        />
-      </View>
-    )
-  },
-)
-InputField.displayName = "InputField"
-export { InputField }
+export const InputField = <
+  TFormValues extends Record<string, string | undefined>,
+>({
+  name,
+  control,
+  label,
+  className,
+  ...props
+}: InputFieldProps<TFormValues>) => {
+  return (
+    <Controller
+      control={control}
+      name={name}
+      render={({
+        field: { value, onChange, onBlur },
+        fieldState: { error, invalid },
+      }) => (
+        <View className="my-4">
+          {label && (
+            <Label
+              nativeID={label}
+              className={cn("font-semibold mb-2", {
+                "text-red-500": invalid,
+              })}
+            >
+              {label}
+            </Label>
+          )}
+          <Input
+            // ref={ref}
+            value={value}
+            onBlur={onBlur}
+            onChangeText={onChange}
+            {...props}
+            className={cn(className, { "border-red-500": invalid })}
+          />
+          {error && (
+            <Small className="text-muted-foreground mt-2">
+              {error.message}
+            </Small>
+          )}
+        </View>
+      )}
+    />
+  )
+}
+
+/* ------------------------- old version to use ref ------------------------- */
+// const InputField = React.forwardRef<
+//   React.ElementRef<typeof TextInput>,
+//   InputFieldProps<Record<string, string | undefined>>
+// >(({ label, control, name, className, ...props }, ref) => {
+//   return (
+//     <Controller
+//       control={control}
+//       name={name}
+//       render={({
+//         field: { value, onChange, onBlur },
+//         fieldState: { error, invalid },
+//       }) => (
+//         <View className="my-4">
+//           {label && (
+//             <Label
+//               nativeID={label}
+//               className={cn("font-semibold mb-2", {
+//                 "text-red-500": invalid,
+//               })}
+//             >
+//               {label}
+//             </Label>
+//           )}
+//           <Input
+//             ref={ref}
+//             value={value}
+//             onBlur={onBlur}
+//             onChangeText={onChange}
+//             {...props}
+//             className={cn(className, { "border-red-500": invalid })}
+//           />
+//           {error && (
+//             <Small className="text-muted-foreground">{error.message}</Small>
+//           )}
+//         </View>
+//       )}
+//     />
+//   )
+// })
+
+// InputField.displayName = "InputField"
+// export { InputField }
