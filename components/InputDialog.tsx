@@ -12,7 +12,7 @@ import {
 import { Button } from "~/components/ui/button"
 import { Text } from "~/components/ui/text"
 import { cn } from "~/lib/utils"
-import InputField from "./InputField"
+import { InputField } from "./InputField"
 import { Small } from "./ui/typography"
 interface InputDialogProps {
   actionAccept: () => void
@@ -20,7 +20,7 @@ interface InputDialogProps {
   buttonFullWitdh?: boolean
   value: string
   onValueChange: (value: string) => void
-  limit: number
+  limit: string
 }
 export function InputDialog({
   actionAccept,

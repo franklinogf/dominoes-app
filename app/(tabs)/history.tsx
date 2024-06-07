@@ -1,7 +1,7 @@
 import { deleteGame, getAllGames } from "db/database"
 // import { type games } from "db/schema"
 import { useEffect, useState } from "react"
-import { FlatList } from "react-native"
+import { FlatList, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { H1 } from "~/components/ui/typography"
 import {
@@ -40,8 +40,10 @@ export default function HistoryPage() {
     getGames()
   }
   return (
-    <SafeAreaView className="pb-[400px]">
-      <H1 className="text-center my-5 text-foreground">Historial</H1>
+    <SafeAreaView edges={["bottom"]}>
+      <View className="pb-2">
+        <H1 className="text-center">Historial</H1>
+      </View>
       <FlatList
         bounces={false}
         data={games}
@@ -75,16 +77,6 @@ export default function HistoryPage() {
                   deleteGameFromHistory(game.id)
                 }}
               />
-              {/* <Button
-                className="w-full"
-                size="sm"
-                variant="destructive"
-                onPress={() => {
-                  deleteGameFromHistory(game.id)
-                }}
-              >
-                
-              </Button> */}
             </CardFooter>
           </Card>
         )}

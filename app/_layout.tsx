@@ -4,7 +4,7 @@ import migrations from "../drizzle/migrations"
 import { Platform, Text, View } from "react-native"
 import { db, expoDb } from "db/database"
 import { type Theme, ThemeProvider } from "@react-navigation/native"
-import "~/global.css"
+import "~/app/global.css"
 import { NAV_THEME } from "~/lib/constants"
 import { SplashScreen, Stack } from "expo-router"
 import { useEffect, useState } from "react"
@@ -12,6 +12,7 @@ import { useColorScheme } from "~/lib/useColorScheme"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { PortalHost } from "~/components/primitives/portal"
 import { useDrizzleStudio } from "expo-drizzle-studio-plugin"
+import { ThemeToggle } from "~/components/ThemeToggle"
 
 const LIGHT_THEME: Theme = {
   dark: false,
@@ -81,11 +82,21 @@ export default function AppLayout() {
     <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
       <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
       <Stack
-        screenOptions={{
-          headerShown: false,
-        }}
+      // screenOptions={{
+      //   headerShown: false,
+      // }}
       >
-        <Stack.Screen name="(tabs)" />
+        <Stack.Screen
+          name="(tabs)"
+          options={{
+            headerTitle: "",
+            headerShadowVisible: false,
+
+            headerRight: () => {
+              return <ThemeToggle />
+            },
+          }}
+        />
       </Stack>
       <PortalHost />
     </ThemeProvider>
