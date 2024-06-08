@@ -20,6 +20,7 @@ interface ConfirmationAlertProps {
   buttonFullWitdh?: boolean
   buttonVariant?: ButtonProps["variant"]
   buttonSize?: ButtonProps["size"]
+  disabled?: boolean
 }
 export function ConfirmationAlert({
   actionAccept,
@@ -30,11 +31,13 @@ export function ConfirmationAlert({
   buttonIcon,
   buttonVariant = "destructive",
   buttonSize = "sm",
+  disabled = false,
 }: ConfirmationAlertProps) {
   return (
     <AlertDialog className={cn({ "w-full": buttonFullWitdh })}>
       <AlertDialogTrigger asChild>
         <Button
+          disabled={disabled}
           className="flex-row gap-2"
           variant={buttonVariant}
           size={buttonSize}

@@ -18,9 +18,7 @@ interface InputFieldProps<TFormValues extends FieldValues>
   control: Control<TFormValues>
   name: Path<TFormValues>
 }
-export const InputField = <
-  TFormValues extends Record<string, string | undefined>,
->({
+export const InputField = <TFormValues extends Record<string, any>>({
   name,
   control,
   label,

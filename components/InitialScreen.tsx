@@ -1,6 +1,6 @@
 import {
   Keyboard,
-  type TextInput,
+  // type TextInput,
   TouchableWithoutFeedback,
   View,
 } from "react-native"
@@ -14,17 +14,17 @@ import type { Teams } from "~/lib/types"
 import { useColorScheme } from "~/lib/useColorScheme"
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group"
 import { Label } from "./ui/label"
-import { useRef } from "react"
+// import { useRef } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 
 const formSchema = z.object({
   team1: z.string().min(1).max(50),
-  team2: z.string().max(50),
-  limit: z.string(),
+  team2: z.string().min(1).max(50),
+  limit: z.coerce.number(),
 })
-
+type FormType = z.infer<typeof formSchema>
 interface InitialScreenProps {
   startGame: ({
     team1,
@@ -33,10 +33,10 @@ interface InitialScreenProps {
   }: {
     team1: string
     team2: string
-    limit: string
+    limit: number
   }) => void
   teamsNames: Teams
-  limit: string
+  limit: number
 }
 
 export function InitialScreen({
@@ -46,16 +46,16 @@ export function InitialScreen({
 }: InitialScreenProps) {
   const { isDarkColorScheme } = useColorScheme()
   const dominoesIcon = isDarkColorScheme ? lightIcon : darkicon
-  const team2InputRef = useRef<TextInput>(null)
-  const { control, handleSubmit } = useForm({
+  // const team2InputRef = useRef<TextInput>(null)
+  const { control, handleSubmit } = useForm<FormType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       team1: teamsNames.team1,
       team2: teamsNames.team2,
-      limit: limit || "200",
+      limit: limit || 200,
     },
   })
-  function onSubmit(data: z.infer<typeof formSchema>) {
+  function onSubmit(data: FormType) {
     startGame({ team1: data.team1, team2: data.team2, limit: data.limit })
   }
   return (
@@ -69,28 +69,31 @@ export function InitialScreen({
           <InputField
             control={control}
             name="team1"
-            returnKeyType="next"
+            returnKeyType="done"
             autoFocus
             maxLength={50}
             autoCapitalize="words"
             label="Equipo 1"
             onSubmitEditing={() => {
-              if (team2InputRef.current) {
-                team2InputRef.current.focus()
-              }
+              // if (team2InputRef.current) {
+              //   team2InputRef.current.focus()
+              // }
+              Keyboard.dismiss()
             }}
             blurOnSubmit={false}
           />
           <InputField
             control={control}
             name="team2"
-            returnKeyType="next"
-            autoFocus
+            returnKeyType="done"
             maxLength={50}
             autoCapitalize="words"
             label="Equipo 2"
             // ref={team2InputRef}
             blurOnSubmit={false}
+            onSubmitEditing={() => {
+              Keyboard.dismiss()
+            }}
           />
 
           <View className="my-4">
@@ -100,7 +103,7 @@ export function InitialScreen({
               name="limit"
               render={({ field: { value, onChange } }) => (
                 <RadioGroup
-                  value={value}
+                  value={value.toString()}
                   onValueChange={onChange}
                   className="w-full flex-row justify-around"
                 >

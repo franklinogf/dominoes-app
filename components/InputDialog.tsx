@@ -14,32 +14,62 @@ import { Text } from "~/components/ui/text"
 import { cn } from "~/lib/utils"
 import { InputField } from "./InputField"
 import { Small } from "./ui/typography"
+import { z } from "zod"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import type { Team } from "~/lib/types"
+import { useState } from "react"
+
+const formSchema = z.object({
+  score: z.coerce.number().min(1),
+})
+type FormType = z.infer<typeof formSchema>
 interface InputDialogProps {
-  actionAccept: () => void
-  buttonText?: string
+  actionAccept: (team: Team, score: number) => void
+  team: Team
+  label?: string
+  labelClassName?: string
   buttonFullWitdh?: boolean
-  value: string
-  onValueChange: (value: string) => void
-  limit: string
+  limit: number
+  disbled?: boolean
 }
 export function InputDialog({
   actionAccept,
-  buttonText,
+  team,
+  label,
+  labelClassName,
   buttonFullWitdh,
-  value,
-  onValueChange,
   limit,
+  disbled = false,
 }: InputDialogProps) {
+  const [open, setOpen] = useState(false)
+  const { control, handleSubmit, resetField } = useForm<FormType>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      score: 0,
+    },
+  })
+
+  function onSubmit(data: FormType) {
+    resetField("score")
+    actionAccept(team, data.score)
+    setOpen(false)
+  }
   return (
     <AlertDialog
-      onOpenChange={(value) => {
-        if (!value) onValueChange("")
-      }}
+      open={open}
+      defaultOpen={true}
       className={cn({ "w-full": buttonFullWitdh })}
     >
       <AlertDialogTrigger asChild>
-        <Button className="w-[200px]">
-          <Text>{buttonText}</Text>
+        <Button
+          disabled={disbled}
+          className="w-[200px]"
+          onPress={() => {
+            setOpen(true)
+          }}
+        >
+          <Text className={cn("font-bold", labelClassName)}>{label}</Text>
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
@@ -50,20 +80,25 @@ export function InputDialog({
         </AlertDialogHeader>
         <View>
           <InputField
+            control={control}
+            name="score"
             contextMenuHidden={true}
             autoFocus={true}
             maxLength={3}
             keyboardType="number-pad"
-            value={value}
-            onChangeText={onValueChange}
           />
           <Small className="text-muted-foreground">Limite: {limit}</Small>
         </View>
         <AlertDialogFooter className="flex-row justify-center gap-8">
-          <AlertDialogCancel>
+          <AlertDialogCancel
+            onPress={() => {
+              resetField("score")
+              setOpen(false)
+            }}
+          >
             <Text>Cancelar</Text>
           </AlertDialogCancel>
-          <AlertDialogAction onPress={actionAccept}>
+          <AlertDialogAction onPress={handleSubmit(onSubmit)}>
             <Text>Aceptar</Text>
           </AlertDialogAction>
         </AlertDialogFooter>
