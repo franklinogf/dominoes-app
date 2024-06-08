@@ -91,7 +91,6 @@ export default function AppLayout() {
           options={{
             headerTitle: "",
             headerShadowVisible: false,
-
             headerRight: () => {
               return <ThemeToggle />
             },

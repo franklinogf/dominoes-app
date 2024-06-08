@@ -83,7 +83,7 @@ export default function IndexPage() {
     team1Total >= limit ? "team1" : team2Total >= limit ? "team2" : undefined
 
   return (
-    <SafeAreaView className="h-full" edges={["bottom"]}>
+    <SafeAreaView className="h-full" edges={["bottom", "left", "right"]}>
       {hasReachLimit &&
         [...Array(5)].map((_, index) => (
           <ConfettiCannon
@@ -100,7 +100,7 @@ export default function IndexPage() {
           limit={limit}
         />
       ) : (
-        <View className="h-full items-center mt-2">
+        <View className="items-center mt-1 max-h-full">
           <ConfirmationAlert
             message="Seguro que desea terminar este juego?"
             actionAcceptText="Terminar"
@@ -108,7 +108,7 @@ export default function IndexPage() {
             actionAccept={endGame}
           />
           <Separator className="my-4" />
-          <View className="flex-row w-full justify-between px-1.5">
+          <View className="flex-row w-full justify-between gap-2 px-1.5">
             <InputDialog
               disbled={winner !== undefined}
               limit={limit}
@@ -130,7 +130,7 @@ export default function IndexPage() {
             className="px-1.5"
             contentContainerClassName="justify-between flex-row w-full flex-1"
           >
-            <View className="w-[200px] gap-2">
+            <View className="w-1/2 gap-2 pr-1.5">
               {scores.team1.map((score, index) => (
                 <ConfirmationAlert
                   disabled={
@@ -150,7 +150,7 @@ export default function IndexPage() {
               ))}
             </View>
             <Separator orientation="vertical" />
-            <View className="w-[200px]">
+            <View className="w-1/2 pl-1.5">
               {scores.team2.map((score, index) => (
                 <ConfirmationAlert
                   disabled={
