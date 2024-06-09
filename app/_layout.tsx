@@ -13,7 +13,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 import { PortalHost } from "~/components/primitives/portal"
 import { useDrizzleStudio } from "expo-drizzle-studio-plugin"
 import { ThemeToggle } from "~/components/ThemeToggle"
-
+// 181219
 const LIGHT_THEME: Theme = {
   dark: false,
   colors: NAV_THEME.light,
@@ -62,9 +62,10 @@ export default function AppLayout() {
     return null
   }
 
-  if (error != null) {
+  if (error) {
     return (
-      <View>
+      <View className="flex-1 justify-center items-center">
+        <Text>Migration error: {JSON.stringify(error, null, 2)}</Text>
         <Text>Migration error: {error.message}</Text>
       </View>
     )
