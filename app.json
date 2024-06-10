@@ -18,13 +18,22 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/dominoes-icon-light.png",
+        "foregroundImage": "./assets/dominoes-icon-dark.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.franklinogf.dominoesapp"
     },
     "web": {
       "favicon": "./assets/dominoes-icon-light.png"
     },
-    "plugins": ["expo-router"]
+    "plugins": ["expo-router"],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "60b9972f-4857-4db3-b067-dbcb2207535c"
+      }
+    }
   }
 }
