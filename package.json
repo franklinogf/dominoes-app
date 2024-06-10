@@ -18,6 +18,7 @@
     "drizzle-orm": "^0.30.10",
     "expo": "^51.0.8",
     "expo-constants": "~16.0.1",
+    "expo-dev-client": "~4.0.15",
     "expo-image": "~1.12.9",
     "expo-linking": "~6.3.1",
     "expo-navigation-bar": "~3.0.4",
@@ -38,8 +39,7 @@
     "tailwind-merge": "^2.3.0",
     "tailwindcss": "^3.4.3",
     "zod": "^3.23.8",
-    "zustand": "^4.5.2",
-    "expo-dev-client": "~4.0.15"
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
     "@babel/core": "^7.24.6",
@@ -53,7 +53,6 @@
     "eslint-plugin-n": "^16.6.2",
     "eslint-plugin-promise": "^6.2.0",
     "eslint-plugin-react": "^7.34.2",
-    "expo-drizzle-studio-plugin": "^0.0.2",
     "prettier": "^3.2.5",
     "typescript": "~5.3.3"
   },
