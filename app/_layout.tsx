@@ -1,7 +1,7 @@
 import { StatusBar } from "expo-status-bar"
 import { useMigrations } from "drizzle-orm/expo-sqlite/migrator"
 import migrations from "../drizzle/migrations"
-import { Platform, Text, View } from "react-native"
+import { Text, View } from "react-native"
 import { db } from "db/database"
 import { type Theme, ThemeProvider } from "@react-navigation/native"
 import "~/app/global.css"
@@ -21,13 +21,9 @@ const DARK_THEME: Theme = {
   dark: true,
   colors: NAV_THEME.dark,
 }
-export {
-  // Catch any errors thrown by the Layout component.
-  ErrorBoundary,
-} from "expo-router"
+export { ErrorBoundary } from "expo-router"
 SplashScreen.preventAutoHideAsync()
 export default function AppLayout() {
-  // useDrizzleStudio(expoDb)
   const { success, error } = useMigrations(db, migrations)
   const { colorScheme, setColorScheme, isDarkColorScheme } = useColorScheme()
   const [isColorSchemeLoaded, setIsColorSchemeLoaded] = useState(false)
@@ -35,10 +31,6 @@ export default function AppLayout() {
   useEffect(() => {
     ;(async () => {
       const theme = await AsyncStorage.getItem("theme")
-      if (Platform.OS === "web") {
-        // Adds the background color to the html element to prevent white background on overscroll.
-        document.documentElement.classList.add("bg-background")
-      }
       if (theme == null) {
         AsyncStorage.setItem("theme", colorScheme)
         setIsColorSchemeLoaded(true)
