@@ -21,7 +21,7 @@ import type { Team } from "~/lib/types"
 import { useState } from "react"
 
 const formSchema = z.object({
-  score: z.coerce.number().min(1),
+  score: z.coerce.number().min(1, { message: "No puede dejarlo vacío" }),
 })
 type FormType = z.infer<typeof formSchema>
 interface InputDialogProps {

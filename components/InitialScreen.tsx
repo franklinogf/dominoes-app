@@ -20,8 +20,14 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 
 const formSchema = z.object({
-  team1: z.string().min(1).max(50),
-  team2: z.string().min(1).max(50),
+  team1: z
+    .string()
+    .min(1, { message: "Debe de contener por lo menos 1 caracter" })
+    .max(15, { message: "El maximo es de 15 caracteres" }),
+  team2: z
+    .string()
+    .min(1, { message: "Debe de contener por lo menos 1 caracter" })
+    .max(15, { message: "El maximo es de 15 caracteres" }),
   limit: z.coerce.number(),
 })
 type FormType = z.infer<typeof formSchema>
@@ -71,7 +77,7 @@ export function InitialScreen({
             name="team1"
             returnKeyType="done"
             autoFocus
-            maxLength={50}
+            maxLength={15}
             autoCapitalize="words"
             label="Equipo 1"
             onSubmitEditing={() => {
@@ -86,7 +92,7 @@ export function InitialScreen({
             control={control}
             name="team2"
             returnKeyType="done"
-            maxLength={50}
+            maxLength={15}
             autoCapitalize="words"
             label="Equipo 2"
             // ref={team2InputRef}
