@@ -72,7 +72,7 @@ export function InputDialog({
           <Text className={cn("font-bold", labelClassName)}>{label}</Text>
         </Button>
       </AlertDialogTrigger>
-      <AlertDialogContent>
+      <AlertDialogContent className="w-full max-w-sm">
         <AlertDialogHeader>
           <AlertDialogTitle className="text-center">
             Agregar puntuación

@@ -42,11 +42,12 @@ export default function HistoryPage() {
   return (
     <SafeAreaView edges={["bottom"]}>
       <View className="pb-2">
-        <H1 className="text-center">Historial</H1>
+        <H1 className="text-center ">Historial</H1>
       </View>
       <FlatList
         bounces={false}
         data={games}
+        keyExtractor={(item) => item.id.toString()}
         contentContainerClassName="gap-4 p-3 pb-20"
         renderItem={({ item: game }) => (
           <Card key={game.id} className="w-full">

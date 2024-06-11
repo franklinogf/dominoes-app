@@ -97,21 +97,25 @@ export default function IndexPage() {
             actionAccept={endGame}
           />
           <Separator className="my-4" />
-          <View className="flex-row w-full justify-between gap-2 px-1.5">
-            <InputDialog
-              disbled={winner !== undefined}
-              limit={limit}
-              label={teamsNames.team1}
-              team="team1"
-              actionAccept={addScore}
-            />
-            <InputDialog
-              disbled={winner !== undefined}
-              limit={limit}
-              label={teamsNames.team2}
-              team="team2"
-              actionAccept={addScore}
-            />
+          <View className="flex-row w-full gap-2 px-1.5">
+            <View className="w-1/2 items-center">
+              <InputDialog
+                disbled={winner !== undefined}
+                limit={limit}
+                label={teamsNames.team1}
+                team="team1"
+                actionAccept={addScore}
+              />
+            </View>
+            <View className="w-1/2 items-center">
+              <InputDialog
+                disbled={winner !== undefined}
+                limit={limit}
+                label={teamsNames.team2}
+                team="team2"
+                actionAccept={addScore}
+              />
+            </View>
           </View>
           <Separator className="my-4" />
           <ScrollView
@@ -160,10 +164,10 @@ export default function IndexPage() {
             </View>
           </ScrollView>
           <Separator className="my-4" />
-          <View className="flex-row w-full justify-between px-1.5 pb-2">
-            <View className="w-1/2">
+          <View className="flex-row w-full px-1.5 pb-2">
+            <View className="w-1/2 items-center">
               <H1
-                className={cn("text-center", {
+                className={cn({
                   "text-green-500": winner === "team1",
                 })}
               >
@@ -174,9 +178,9 @@ export default function IndexPage() {
               </Small>
             </View>
 
-            <View className="w-1/2">
+            <View className="w-1/2 items-center">
               <H1
-                className={cn("text-center", {
+                className={cn({
                   "text-green-500": winner === "team2",
                 })}
               >

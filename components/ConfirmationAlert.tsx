@@ -46,11 +46,11 @@ export function ConfirmationAlert({
           {buttonIcon}
         </Button>
       </AlertDialogTrigger>
-      <AlertDialogContent>
+      <AlertDialogContent className="w-full max-w-sm">
         <AlertDialogHeader>
-          <AlertDialogTitle>{message}</AlertDialogTitle>
+          <AlertDialogTitle className="text-center">{message}</AlertDialogTitle>
         </AlertDialogHeader>
-        <AlertDialogFooter className="flex-row justify-center gap-8">
+        <AlertDialogFooter className="flex-row justify-center gap-4">
           <AlertDialogCancel>
             <Text>Cancelar</Text>
           </AlertDialogCancel>
