@@ -5,7 +5,7 @@
     "scheme": "dominoes-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/dominoes-icon-light.png",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/splash.png",
