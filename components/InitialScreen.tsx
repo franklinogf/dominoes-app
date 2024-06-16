@@ -80,19 +80,20 @@ export function InitialScreen({
   }
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <ScrollView bounces={false}>
+      <ScrollView bounces={false} showsVerticalScrollIndicator={false}>
         <View
           style={{
             flex: 1,
             justifyContent: "center",
             alignItems: "center",
             minHeight: "100%",
+            paddingBottom: 20,
           }}
         >
           <View style={{ width: 100, height: 100 }}>
             <Image
               source={dominoesIcon}
-              contentFit="cover"
+              contentFit="contain"
               style={{ flex: 1 }}
             />
           </View>
@@ -142,7 +143,7 @@ export function InitialScreen({
               </ToggleGroupItem>
             </ToggleGroup>
           </View>
-          <View className="w-[300px]">
+          <View style={{ flexGrow: 1 }} className="w-[300px]">
             <InputField
               control={control}
               name="team1"
