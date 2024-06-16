@@ -1,5 +1,5 @@
 import { FlatList, ScrollView, View } from "react-native"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { insertNewGame } from "db/database"
 import { InitialScreen } from "~/components/InitialScreen"
 import type { TeamKeys, Teams } from "~/lib/types"
@@ -12,10 +12,10 @@ import { H1, Small } from "~/components/ui/typography"
 const initialTeamState: Teams = {
   team1: {
     name: "Omar",
-    score: [],
+    score: [1, 5, 9, 7],
   },
-  team2: { name: "Darwin", score: [] },
-  team3: { name: "", score: [] },
+  team2: { name: "Darwin", score: [6, 4, 9] },
+  team3: { name: "Daisy", score: [8, 6, 3] },
   team4: { name: "", score: [] },
 }
 function sumScores(scores: number[]) {
@@ -26,37 +26,56 @@ export default function IndexPage() {
   const [teams, setTeams] = useState<Teams>(initialTeamState)
   const [gameStarted, setGameStarted] = useState(true)
   const [limit, setLimit] = useState<number>(200)
+  const [winner, setWinner] = useState<TeamKeys | undefined>(undefined)
 
-  function getWinner(teams: Teams) {
-    const winner = Object.keys(teams).filter((x) => {
+  useEffect(() => {
+    const winningTeam = Object.keys(teams).filter((x) => {
       return sumScores(teams[x as TeamKeys].score) === limit
     }) as TeamKeys[]
 
-    return winner.length > 0 ? winner[0] : undefined
-  }
-  const startGame = (teams: Teams, limit: number) => {
+    setWinner(winningTeam.length > 0 ? winningTeam[0] : undefined)
+  }, [teams])
+
+  function startGame(teams: Teams, limit: number) {
     setTeams(teams)
     setLimit(limit)
     setGameStarted(true)
   }
 
-  const endGame = () => {
+  function endGame() {
+    const teamScores = Object.entries(teams).reduce((obj, [key, team]) => {
+      return { ...obj, [key]: { ...team, score: sumScores(team.score) } }
+    }, {}) as Record<TeamKeys, { name: string; score: number }>
+
+    const { team1, team2, team3, team4 } = teamScores
+
+    if (
+      team1.score > 0 ||
+      team2.score > 0 ||
+      team3.score > 0 ||
+      team4.score > 0
+    ) {
+      const scores = Object.entries(teamScores).flatMap(
+        ([_, team]) => team.score,
+      )
+      const teamWithMostPoints = Object.keys(teamScores).filter((x) => {
+        return teamScores[x as TeamKeys].score === Math.max(...scores)
+      })[0] as TeamKeys
+
+      insertNewGame({
+        winner: winner ?? teamWithMostPoints,
+        score1: team1.score,
+        score2: team2.score,
+        score3: team3.score,
+        score4: team4.score,
+        team1: team1.name,
+        team2: team2.name,
+        team3: team3.name,
+        team4: team4.name,
+      })
+    }
     setTeams(initialTeamState)
     setGameStarted(false)
-    // const { team1, team2 } = teams
-    // const score1 = sumScores(scores.team1)
-    // const score2 = sumScores(scores.team2)
-    // const winner = score1 > score2 ? "team1" : "team2"
-
-    // if (score1 > 0 || score2 > 0) {
-    //   insertNewGame({
-    //     winner,
-    //     score1,
-    //     score2,
-    //     team1,
-    //     team2,
-    //   })
-    // }
   }
 
   const addScore = (teamKey: TeamKeys, newScore: number) => {
@@ -80,8 +99,6 @@ export default function IndexPage() {
       }
     })
   }
-
-  const winner: TeamKeys | undefined = getWinner(teams)
 
   const teamsMap = Object.entries(teams).filter(([_, team]) => team.name !== "")
 

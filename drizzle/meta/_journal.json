@@ -8,6 +8,13 @@
       "when": 1717906126831,
       "tag": "0000_military_tigra",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1718571378298,
+      "tag": "0001_happy_strong_guy",
+      "breakpoints": true
     }
   ]
 }
