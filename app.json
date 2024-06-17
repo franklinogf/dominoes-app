@@ -17,10 +17,6 @@
       "supportsTablet": true
     },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/dominoes-icon-dark.png",
-        "backgroundColor": "#ffffff"
-      },
       "package": "com.franklinogf.dominoesapp"
     },
     "web": {
