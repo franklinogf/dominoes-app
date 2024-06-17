@@ -13,6 +13,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 import { PortalHost } from "~/components/primitives/portal"
 import { ThemeToggle } from "~/components/ThemeToggle"
 import { useDrizzleStudio } from "expo-drizzle-studio-plugin"
+
 // 181219
 const LIGHT_THEME: Theme = {
   dark: false,
@@ -74,11 +75,7 @@ export default function AppLayout() {
   return (
     <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
       <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
-      <Stack
-      // screenOptions={{
-      //   headerShown: false,
-      // }}
-      >
+      <Stack>
         <Stack.Screen
           name="(tabs)"
           options={{

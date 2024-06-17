@@ -22,7 +22,7 @@
     "web": {
       "favicon": "./assets/dominoes-icon-light.png"
     },
-    "plugins": ["expo-router"],
+    "plugins": ["expo-router", "expo-localization"],
     "extra": {
       "router": {
         "origin": false
