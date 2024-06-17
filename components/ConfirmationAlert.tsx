@@ -42,7 +42,7 @@ export function ConfirmationAlert({
           variant={buttonVariant}
           size={buttonSize}
         >
-          <Text>{buttonText}</Text>
+          <Text style={{ fontSize: 20 }}>{buttonText}</Text>
           {buttonIcon}
         </Button>
       </AlertDialogTrigger>

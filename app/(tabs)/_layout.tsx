@@ -16,10 +16,15 @@ export default function TabLayout() {
               : NAV_THEME.light.primary,
           },
           tabBarActiveTintColor: isDarkColorScheme
-            ? NAV_THEME.dark.border
-            : NAV_THEME.light.border,
+            ? NAV_THEME.dark.background
+            : NAV_THEME.light.background,
           tabBarInactiveTintColor: isDarkColorScheme ? "gray" : "gray",
           headerShown: false,
+          tabBarLabelStyle: {
+            fontSize: 14,
+            fontWeight: "600",
+          },
+          tabBarHideOnKeyboard: true,
         }}
       >
         <Tabs.Screen
@@ -27,7 +32,7 @@ export default function TabLayout() {
           options={{
             title: "Juego",
             tabBarIcon: ({ color }) => (
-              <FontAwesome size={28} name="gamepad" color={color} />
+              <FontAwesome size={26} name="gamepad" color={color} />
             ),
           }}
         />
@@ -36,7 +41,7 @@ export default function TabLayout() {
           options={{
             title: "Historial",
             tabBarIcon: ({ color }) => (
-              <FontAwesome size={28} name="history" color={color} />
+              <FontAwesome size={24} name="history" color={color} />
             ),
           }}
         />

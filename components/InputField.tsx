@@ -10,6 +10,7 @@ import {
   type FieldValues,
 } from "react-hook-form"
 import { Small } from "./ui/typography"
+import { Text } from "./ui/text"
 
 interface InputFieldProps<TFormValues extends FieldValues>
   extends TextInputProps {
@@ -33,7 +34,7 @@ export const InputField = <TFormValues extends Record<string, any>>({
         field: { value, onChange, onBlur },
         fieldState: { error, invalid },
       }) => (
-        <View className="my-4">
+        <View className="mb-4">
           {label && (
             <Label
               nativeID={label}
@@ -41,11 +42,10 @@ export const InputField = <TFormValues extends Record<string, any>>({
                 "text-red-500": invalid,
               })}
             >
-              {label}
+              <Text className="text-lg">{label}</Text>
             </Label>
           )}
           <Input
-            // ref={ref}
             value={value}
             onBlur={onBlur}
             onChangeText={onChange}

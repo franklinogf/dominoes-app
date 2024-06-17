@@ -17,7 +17,7 @@ import { Small } from "./ui/typography"
 import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import type { Team } from "~/lib/types"
+import type { TeamKeys } from "~/lib/types"
 import { useState } from "react"
 
 const formSchema = z.object({
@@ -25,8 +25,8 @@ const formSchema = z.object({
 })
 type FormType = z.infer<typeof formSchema>
 interface InputDialogProps {
-  actionAccept: (team: Team, score: number) => void
-  team: Team
+  actionAccept: (teamKey: TeamKeys, score: number) => void
+  team: TeamKeys
   label?: string
   labelClassName?: string
   buttonFullWitdh?: boolean
@@ -63,8 +63,8 @@ export function InputDialog({
     >
       <AlertDialogTrigger asChild>
         <Button
+          className="w-[100px]"
           disabled={disbled}
-          className="w-[180px]"
           onPress={() => {
             setOpen(true)
           }}
