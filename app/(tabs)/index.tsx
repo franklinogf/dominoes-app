@@ -11,11 +11,11 @@ import { H1, Small } from "~/components/ui/typography"
 
 const initialTeamState: Teams = {
   team1: {
-    name: "Omar",
-    score: [1, 5, 9, 7],
+    name: "",
+    score: [],
   },
-  team2: { name: "Darwin", score: [6, 4, 9] },
-  team3: { name: "Daisy", score: [8, 6, 3] },
+  team2: { name: "", score: [] },
+  team3: { name: "", score: [] },
   team4: { name: "", score: [] },
 }
 function sumScores(scores: number[]) {
@@ -24,7 +24,7 @@ function sumScores(scores: number[]) {
 
 export default function IndexPage() {
   const [teams, setTeams] = useState<Teams>(initialTeamState)
-  const [gameStarted, setGameStarted] = useState(true)
+  const [gameStarted, setGameStarted] = useState(false)
   const [limit, setLimit] = useState<number>(200)
   const [winner, setWinner] = useState<TeamKeys | undefined>(undefined)
 
