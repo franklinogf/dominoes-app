@@ -10,10 +10,7 @@ import { cn } from "~/lib/utils"
 import { H1, Small } from "~/components/ui/typography"
 
 const initialTeamState: Teams = {
-  team1: {
-    name: "",
-    score: [],
-  },
+  team1: { name: "", score: [] },
   team2: { name: "", score: [] },
   team3: { name: "", score: [] },
   team4: { name: "", score: [] },
@@ -30,7 +27,7 @@ export default function IndexPage() {
 
   useEffect(() => {
     const winningTeam = Object.keys(teams).filter((x) => {
-      return sumScores(teams[x as TeamKeys].score) === limit
+      return sumScores(teams[x as TeamKeys].score) >= limit
     }) as TeamKeys[]
 
     setWinner(winningTeam.length > 0 ? winningTeam[0] : undefined)
@@ -40,6 +37,22 @@ export default function IndexPage() {
     setTeams(teams)
     setLimit(limit)
     setGameStarted(true)
+  }
+
+  function teamWithMostPoints() {
+    const scores = Object.entries(teams).map(([_, team]) =>
+      sumScores(team.score),
+    )
+    console.log({ scores })
+
+    const teamWithMostPoints = Object.keys(teams).filter((x) => {
+      if (sumScores(teams[x as TeamKeys].score) === 0) return false
+      if (sumScores(teams[x as TeamKeys].score) === Math.max(...scores)) {
+        return true
+      }
+      return false
+    })
+    return teamWithMostPoints[0] as TeamKeys
   }
 
   function endGame() {
@@ -55,15 +68,8 @@ export default function IndexPage() {
       team3.score > 0 ||
       team4.score > 0
     ) {
-      const scores = Object.entries(teamScores).flatMap(
-        ([_, team]) => team.score,
-      )
-      const teamWithMostPoints = Object.keys(teamScores).filter((x) => {
-        return teamScores[x as TeamKeys].score === Math.max(...scores)
-      })[0] as TeamKeys
-
       insertNewGame({
-        winner: winner ?? teamWithMostPoints,
+        winner: winner ?? teamWithMostPoints(),
         score1: team1.score,
         score2: team2.score,
         score3: team3.score,
@@ -107,7 +113,7 @@ export default function IndexPage() {
       {!gameStarted ? (
         <InitialScreen startGame={startGame} limit={limit} />
       ) : (
-        <View style={{ alignItems: "center", flex: 1 }}>
+        <View style={{ alignItems: "center", flex: 1, paddingHorizontal: 5 }}>
           <ConfirmationAlert
             message="Seguro que desea terminar este juego?"
             actionAcceptText="Terminar"
@@ -120,7 +126,8 @@ export default function IndexPage() {
             style={{
               width: "100%",
               flexDirection: "row",
-              justifyContent: "space-around",
+              justifyContent: "space-evenly",
+              alignItems: "center",
             }}
           >
             {teamsMap.map(([key, team]) => (
@@ -136,53 +143,6 @@ export default function IndexPage() {
           </View>
 
           <Separator className="my-4" />
-          {/* <ScrollView
-            // bounces={false}
-            className="px-1.5"
-            contentContainerClassName="justify-between flex-row w-full"
-          >
-            <View className="w-1/2 gap-2 pr-1.5">
-              {teams.team1.score.map((score, index) => (
-                <ConfirmationAlert
-                  disabled={
-                    (winner === "team1" &&
-                      index !== teams.team1.score.length - 1) ||
-                    winner === "team2"
-                  }
-                  buttonVariant="outline"
-                  buttonSize="lg"
-                  key={`team1-${index}`}
-                  message="Desea borrarlo?"
-                  actionAcceptText="Borrar"
-                  buttonText={score.toString()}
-                  actionAccept={() => {
-                    removeScore("team1", index)
-                  }}
-                />
-              ))}
-            </View>
-            <Separator orientation="vertical" />
-            <View className="w-1/2 pl-1.5">
-              {teams.team2.score.map((score, index) => (
-                <ConfirmationAlert
-                  disabled={
-                    (winner === "team2" &&
-                      index !== teams.team2.score.length - 1) ||
-                    winner === "team1"
-                  }
-                  buttonVariant="outline"
-                  buttonSize="lg"
-                  key={`team2-${index}`}
-                  message="Desea borrarlo?"
-                  actionAcceptText="Borrar"
-                  buttonText={score.toString()}
-                  actionAccept={() => {
-                    removeScore("team2", index)
-                  }}
-                />
-              ))}
-            </View>
-          </ScrollView> */}
           <ScrollView
             style={{ width: "100%" }}
             bounces={false}
@@ -257,9 +217,13 @@ export default function IndexPage() {
                   >
                     {totalScore}
                   </H1>
-                  <Small className="text-center text-muted-foreground">
-                    -{limit - totalScore}
-                  </Small>
+                  {winner === key ? (
+                    <Small className={"font-bold text-green-500"}>Winner</Small>
+                  ) : (
+                    <Small className="text-center text-muted-foreground">
+                      {limit - totalScore}
+                    </Small>
+                  )}
                 </View>
               )
             })}
