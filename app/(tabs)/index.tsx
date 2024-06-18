@@ -81,7 +81,10 @@ export default function IndexPage() {
 
     setTeams((prev) => {
       return {
-        ...prev,
+        team1: { ...prev.team1, score: [] },
+        team2: { ...prev.team2, score: [] },
+        team3: { ...prev.team3, score: [] },
+        team4: { ...prev.team4, score: [] },
         [winnerTeam]: {
           ...prev[winnerTeam],
           score: [],
@@ -102,7 +105,6 @@ export default function IndexPage() {
       team4: teams.team4.name,
     })
   }
-  console.log(sumScores([]))
   const addScore = (teamKey: TeamKeys, newScore: number) => {
     setTeams((prev) => {
       const team = prev[teamKey]
@@ -158,7 +160,6 @@ export default function IndexPage() {
             />
           </View>
           <Separator className="my-4" />
-
           <View
             style={{
               width: "100%",
@@ -168,16 +169,17 @@ export default function IndexPage() {
             }}
           >
             {teamsMap.map(([key, team]) => (
-              <InputDialog
-                onLongPress={addScoreWhenAllPassed}
-                wins={team.wins}
-                key={key}
-                disbled={winner !== undefined}
-                limit={limit}
-                label={team.name}
-                team={key as TeamKeys}
-                actionAccept={addScore}
-              />
+              <View className="max-w-[100px] min-w-[85px]" key={key}>
+                <InputDialog
+                  onLongPress={addScoreWhenAllPassed}
+                  wins={team.wins}
+                  disbled={winner !== undefined}
+                  limit={limit}
+                  label={team.name}
+                  team={key as TeamKeys}
+                  actionAccept={addScore}
+                />
+              </View>
             ))}
           </View>
 
@@ -205,7 +207,7 @@ export default function IndexPage() {
                 renderItem={({ item: [key, team] }) => {
                   const teamKey = key as TeamKeys
                   return (
-                    <View style={{ width: 100 }}>
+                    <View className="max-w-[100px] min-w-[85px]">
                       {team.score.map((score, index) => (
                         <View
                           style={{ marginBottom: 5 }}
@@ -247,7 +249,10 @@ export default function IndexPage() {
             {teamsMap.map(([key, team]) => {
               const totalScore = sumScores(team.score)
               return (
-                <View key={key} className="items-center">
+                <View
+                  key={key}
+                  className="items-center max-w-[100px] min-w-[85px]"
+                >
                   <H1
                     className={cn({
                       "text-green-500": winner === key,
