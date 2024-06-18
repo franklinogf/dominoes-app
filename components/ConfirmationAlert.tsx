@@ -1,3 +1,4 @@
+import { useState } from "react"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,9 +22,13 @@ interface ConfirmationAlertProps {
   buttonVariant?: ButtonProps["variant"]
   buttonSize?: ButtonProps["size"]
   disabled?: boolean
+  onPress?: () => void
+  showAlert?: () => void
 }
 export function ConfirmationAlert({
   actionAccept,
+  showAlert,
+  onPress,
   buttonText,
   message,
   actionAcceptText,
@@ -33,10 +38,16 @@ export function ConfirmationAlert({
   buttonSize = "sm",
   disabled = false,
 }: ConfirmationAlertProps) {
+  const [open, setOpen] = useState(false)
+
   return (
-    <AlertDialog className={cn({ "w-full": buttonFullWitdh })}>
+    <AlertDialog open={open} className={cn({ "w-full": buttonFullWitdh })}>
       <AlertDialogTrigger asChild>
         <Button
+          onPress={() => {
+            onPress?.()
+            setOpen(true)
+          }}
           disabled={disabled}
           className="flex-row gap-2"
           variant={buttonVariant}
@@ -51,11 +62,20 @@ export function ConfirmationAlert({
           <AlertDialogTitle className="text-center">{message}</AlertDialogTitle>
         </AlertDialogHeader>
         <AlertDialogFooter className="flex-row justify-center gap-4">
-          <AlertDialogCancel>
+          <AlertDialogCancel
+            onPress={() => {
+              setOpen(false)
+            }}
+          >
             <Text>Cancelar</Text>
           </AlertDialogCancel>
 
-          <AlertDialogAction onPress={actionAccept}>
+          <AlertDialogAction
+            onPress={() => {
+              showAlert?.()
+              actionAccept()
+            }}
+          >
             <Text>{actionAcceptText}</Text>
           </AlertDialogAction>
         </AlertDialogFooter>

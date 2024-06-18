@@ -14,6 +14,8 @@ import { PortalHost } from "~/components/primitives/portal"
 import { ThemeToggle } from "~/components/ThemeToggle"
 import { useDrizzleStudio } from "expo-drizzle-studio-plugin"
 
+import { useAds } from "~/hooks/useAds"
+
 // 181219
 const LIGHT_THEME: Theme = {
   dark: false,
@@ -24,12 +26,15 @@ const DARK_THEME: Theme = {
   colors: NAV_THEME.dark,
 }
 export { ErrorBoundary } from "expo-router"
+
 SplashScreen.preventAutoHideAsync()
 export default function AppLayout() {
   const { success, error } = useMigrations(db, migrations)
   const { colorScheme, setColorScheme, isDarkColorScheme } = useColorScheme()
   const [isColorSchemeLoaded, setIsColorSchemeLoaded] = useState(false)
   useDrizzleStudio(expoDb)
+  useAds()
+
   useEffect(() => {
     ;(async () => {
       const theme = await AsyncStorage.getItem("theme")

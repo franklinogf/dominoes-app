@@ -1,5 +1,4 @@
 import { deleteGame, getAllGames } from "db/database"
-// import { type games } from "db/schema"
 import { useEffect, useState } from "react"
 import { FlatList, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
@@ -10,6 +9,8 @@ import { usePathname } from "expo-router"
 
 import { GameHistoryCard } from "~/components/GameHistoryCard"
 import { Text } from "~/components/ui/text"
+import { BannerAd, BannerAdSize } from "react-native-google-mobile-ads"
+import ads from "~/config/ads"
 type Game = typeof games.$inferSelect
 export default function HistoryPage() {
   const pathname = usePathname()
@@ -32,7 +33,11 @@ export default function HistoryPage() {
   }
   return (
     <SafeAreaView edges={["bottom"]}>
-      <View className="pb-2">
+      <BannerAd
+        unitId={ads.bannerUnitID}
+        size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+      />
+      <View className="my-2">
         <H1 className="text-center">Historial</H1>
       </View>
       <FlatList

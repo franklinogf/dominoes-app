@@ -1,6 +1,6 @@
 import { FlatList, ScrollView, View } from "react-native"
 import { useEffect, useState } from "react"
-import { insertNewGame } from "db/database"
+import { insertNewGame } from "~/db/database"
 import { InitialScreen } from "~/components/InitialScreen"
 import type { TeamKeys, Teams } from "~/lib/types"
 import { ConfirmationAlert } from "~/components/ConfirmationAlert"
@@ -8,14 +8,16 @@ import { Separator } from "~/components/ui/separator"
 import { InputDialog } from "~/components/InputDialog"
 import { cn } from "~/lib/utils"
 import { H1, Small } from "~/components/ui/typography"
+import { useInterstitialAd } from "react-native-google-mobile-ads"
+import ads from "~/config/ads"
 
 const initialTeamState: Teams = {
   team1: {
-    name: "Omar",
-    score: [1, 5, 9, 7],
+    name: "",
+    score: [],
   },
-  team2: { name: "Darwin", score: [6, 4, 9] },
-  team3: { name: "Daisy", score: [8, 6, 3] },
+  team2: { name: "", score: [] },
+  team3: { name: "", score: [] },
   team4: { name: "", score: [] },
 }
 function sumScores(scores: number[]) {
@@ -24,9 +26,35 @@ function sumScores(scores: number[]) {
 
 export default function IndexPage() {
   const [teams, setTeams] = useState<Teams>(initialTeamState)
-  const [gameStarted, setGameStarted] = useState(true)
+  const [gameStarted, setGameStarted] = useState(false)
   const [limit, setLimit] = useState<number>(200)
   const [winner, setWinner] = useState<TeamKeys | undefined>(undefined)
+  const [buttonAmountPressed, setButtonAmountPressed] = useState(0)
+  const { isLoaded, show, load } = useInterstitialAd(ads.interstitialUnitID, {
+    keywords: ["games", "game", "League of legends", "Fortnite"],
+  })
+  useEffect(() => {
+    load()
+  }, [load])
+  useEffect(() => {
+    console.log({ isLoaded }, buttonAmountPressed)
+    if (
+      buttonAmountPressed < ads.BUTTON_AMOUNT_PRESSED_LIMIT_TO_SHOW_AD &&
+      !isLoaded
+    ) {
+      console.log("load")
+
+      load()
+      return
+    }
+    if (
+      buttonAmountPressed >= ads.BUTTON_AMOUNT_PRESSED_LIMIT_TO_SHOW_AD &&
+      isLoaded
+    ) {
+      show()
+      setButtonAmountPressed(0)
+    }
+  }, [buttonAmountPressed])
 
   useEffect(() => {
     const winningTeam = Object.keys(teams).filter((x) => {
@@ -109,6 +137,11 @@ export default function IndexPage() {
       ) : (
         <View style={{ alignItems: "center", flex: 1 }}>
           <ConfirmationAlert
+            onPress={() => {
+              console.log(isLoaded)
+              load()
+            }}
+            showAlert={isLoaded ? show : undefined}
             message="Seguro que desea terminar este juego?"
             actionAcceptText="Terminar"
             buttonText="Terminar juego"
@@ -125,6 +158,9 @@ export default function IndexPage() {
           >
             {teamsMap.map(([key, team]) => (
               <InputDialog
+                onPress={() => {
+                  setButtonAmountPressed(buttonAmountPressed + 1)
+                }}
                 key={key}
                 disbled={winner !== undefined}
                 limit={limit}
@@ -136,53 +172,6 @@ export default function IndexPage() {
           </View>
 
           <Separator className="my-4" />
-          {/* <ScrollView
-            // bounces={false}
-            className="px-1.5"
-            contentContainerClassName="justify-between flex-row w-full"
-          >
-            <View className="w-1/2 gap-2 pr-1.5">
-              {teams.team1.score.map((score, index) => (
-                <ConfirmationAlert
-                  disabled={
-                    (winner === "team1" &&
-                      index !== teams.team1.score.length - 1) ||
-                    winner === "team2"
-                  }
-                  buttonVariant="outline"
-                  buttonSize="lg"
-                  key={`team1-${index}`}
-                  message="Desea borrarlo?"
-                  actionAcceptText="Borrar"
-                  buttonText={score.toString()}
-                  actionAccept={() => {
-                    removeScore("team1", index)
-                  }}
-                />
-              ))}
-            </View>
-            <Separator orientation="vertical" />
-            <View className="w-1/2 pl-1.5">
-              {teams.team2.score.map((score, index) => (
-                <ConfirmationAlert
-                  disabled={
-                    (winner === "team2" &&
-                      index !== teams.team2.score.length - 1) ||
-                    winner === "team1"
-                  }
-                  buttonVariant="outline"
-                  buttonSize="lg"
-                  key={`team2-${index}`}
-                  message="Desea borrarlo?"
-                  actionAcceptText="Borrar"
-                  buttonText={score.toString()}
-                  actionAccept={() => {
-                    removeScore("team2", index)
-                  }}
-                />
-              ))}
-            </View>
-          </ScrollView> */}
           <ScrollView
             style={{ width: "100%" }}
             bounces={false}
@@ -214,6 +203,9 @@ export default function IndexPage() {
                           key={`${teamKey}-${index}`}
                         >
                           <ConfirmationAlert
+                            onPress={() => {
+                              setButtonAmountPressed(buttonAmountPressed + 1)
+                            }}
                             disabled={
                               (winner === teamKey &&
                                 index !== team.score.length - 1) ||

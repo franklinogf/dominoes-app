@@ -32,9 +32,11 @@ interface InputDialogProps {
   buttonFullWitdh?: boolean
   limit: number
   disbled?: boolean
+  onPress?: () => void
 }
 export function InputDialog({
   actionAccept,
+  onPress,
   team,
   label,
   labelClassName,
@@ -66,6 +68,7 @@ export function InputDialog({
           className="w-[100px]"
           disabled={disbled}
           onPress={() => {
+            onPress?.()
             setOpen(true)
           }}
         >
