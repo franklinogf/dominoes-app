@@ -69,7 +69,6 @@ export function InputDialog({
           onLongPress={() => {
             onLongPress?.(team)
           }}
-          className="max-w-[100px] min-w-[85px]"
           disabled={disbled}
           onPress={() => {
             setOpen(true)
