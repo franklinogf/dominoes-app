@@ -1,8 +1,6 @@
-import { deleteGame, getAllGames } from "db/database"
-// import { type games } from "db/schema"
+import { deleteAllGames, deleteGame, getAllGames } from "db/database"
 import { useEffect, useState } from "react"
 import { FlatList, View } from "react-native"
-import { SafeAreaView } from "react-native-safe-area-context"
 import { H1 } from "~/components/ui/typography"
 
 import { type games } from "~/db/schema"
@@ -10,6 +8,7 @@ import { usePathname } from "expo-router"
 
 import { GameHistoryCard } from "~/components/GameHistoryCard"
 import { Text } from "~/components/ui/text"
+import { ConfirmationAlert } from "~/components/ConfirmationAlert"
 type Game = typeof games.$inferSelect
 export default function HistoryPage() {
   const pathname = usePathname()
@@ -30,12 +29,23 @@ export default function HistoryPage() {
     await deleteGame({ gameId })
     getGames()
   }
+  const handleDeleteAllGamesButton = async () => {
+    await deleteAllGames()
+    getGames()
+  }
   return (
-    <SafeAreaView edges={["bottom"]}>
-      <View className="pb-2">
+    <View>
+      <View className="pb-2 items-center gap-2">
         <H1 className="text-center">Historial</H1>
+        <ConfirmationAlert
+          buttonText="Borrar todo el historial"
+          actionAccept={handleDeleteAllGamesButton}
+          actionAcceptText="Borrar todo"
+          message="Desea borrar todo el historial?"
+        />
       </View>
       <FlatList
+        contentContainerStyle={{ paddingBottom: 180 }}
         bounces={false}
         data={games}
         keyExtractor={(item) => item.id.toString()}
@@ -62,6 +72,6 @@ export default function HistoryPage() {
           )
         }}
       />
-    </SafeAreaView>
+    </View>
   )
 }

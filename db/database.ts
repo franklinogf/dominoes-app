@@ -45,3 +45,6 @@ export const getAllGames = async () => {
 export const deleteGame = async ({ gameId }: { gameId: number }) => {
   await db.delete(schema.games).where(eq(schema.games.id, gameId))
 }
+export const deleteAllGames = async () => {
+  await db.delete(schema.games)
+}
