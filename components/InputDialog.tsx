@@ -63,7 +63,7 @@ export function InputDialog({
     >
       <AlertDialogTrigger asChild>
         <Button
-          className="w-[100px]"
+          className="max-w-[100px] min-w-[85px]"
           disabled={disbled}
           onPress={() => {
             setOpen(true)
