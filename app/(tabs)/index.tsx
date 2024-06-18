@@ -10,10 +10,10 @@ import { cn } from "~/lib/utils"
 import { H1, Small } from "~/components/ui/typography"
 
 const initialTeamState: Teams = {
-  team1: { name: "", score: [] },
-  team2: { name: "", score: [] },
-  team3: { name: "", score: [] },
-  team4: { name: "", score: [] },
+  team1: { name: "", score: [], wins: 0 },
+  team2: { name: "", score: [], wins: 0 },
+  team3: { name: "", score: [], wins: 0 },
+  team4: { name: "", score: [], wins: 0 },
 }
 function sumScores(scores: number[]) {
   return scores.reduce((a, b) => a + b, 0)
@@ -43,7 +43,6 @@ export default function IndexPage() {
     const scores = Object.entries(teams).map(([_, team]) =>
       sumScores(team.score),
     )
-    console.log({ scores })
 
     const teamWithMostPoints = Object.keys(teams).filter((x) => {
       if (sumScores(teams[x as TeamKeys].score) === 0) return false
@@ -52,45 +51,65 @@ export default function IndexPage() {
       }
       return false
     })
-    return teamWithMostPoints[0] as TeamKeys
+    return (
+      teamWithMostPoints.length > 0 ? teamWithMostPoints[0] : undefined
+    ) as TeamKeys | undefined
   }
 
   function endGame() {
-    const teamScores = Object.entries(teams).reduce((obj, [key, team]) => {
-      return { ...obj, [key]: { ...team, score: sumScores(team.score) } }
-    }, {}) as Record<TeamKeys, { name: string; score: number }>
-
-    const { team1, team2, team3, team4 } = teamScores
-
-    if (
-      team1.score > 0 ||
-      team2.score > 0 ||
-      team3.score > 0 ||
-      team4.score > 0
-    ) {
+    const winnerTeam = winner ?? teamWithMostPoints()
+    if (winnerTeam) {
       insertNewGame({
-        winner: winner ?? teamWithMostPoints(),
-        score1: team1.score,
-        score2: team2.score,
-        score3: team3.score,
-        score4: team4.score,
-        team1: team1.name,
-        team2: team2.name,
-        team3: team3.name,
-        team4: team4.name,
+        winner: winnerTeam,
+        score1: sumScores(teams.team1.score),
+        score2: sumScores(teams.team2.score),
+        score3: sumScores(teams.team3.score),
+        score4: sumScores(teams.team4.score),
+        team1: teams.team1.name,
+        team2: teams.team2.name,
+        team3: teams.team3.name,
+        team4: teams.team4.name,
       })
     }
     setTeams(initialTeamState)
     setGameStarted(false)
   }
+  function restartGame() {
+    const winnerTeam = winner ?? teamWithMostPoints()
 
+    if (winnerTeam === undefined) return
+
+    setTeams((prev) => {
+      return {
+        ...prev,
+        [winnerTeam]: {
+          ...prev[winnerTeam],
+          score: [],
+          wins: prev[winnerTeam].wins + 1,
+        },
+      }
+    })
+
+    insertNewGame({
+      winner: winnerTeam,
+      score1: sumScores(teams.team1.score),
+      score2: sumScores(teams.team2.score),
+      score3: sumScores(teams.team3.score),
+      score4: sumScores(teams.team4.score),
+      team1: teams.team1.name,
+      team2: teams.team2.name,
+      team3: teams.team3.name,
+      team4: teams.team4.name,
+    })
+  }
+  console.log(sumScores([]))
   const addScore = (teamKey: TeamKeys, newScore: number) => {
     setTeams((prev) => {
       const team = prev[teamKey]
       team.score.push(newScore)
       return {
         ...prev,
-        [teamKey]: { name: prev[teamKey].name, score: team.score },
+        [teamKey]: { ...prev[teamKey], score: team.score },
       }
     })
   }
@@ -101,37 +120,57 @@ export default function IndexPage() {
       team.score.splice(scoreIndex, 1)
       return {
         ...prev,
-        [teamKey]: { name: prev[teamKey].name, score: team.score },
+        [teamKey]: { ...prev[teamKey], score: team.score },
+      }
+    })
+  }
+  function addScoreWhenAllPassed(teamKey: TeamKeys) {
+    setTeams((prev) => {
+      const team = prev[teamKey]
+      team.score.push(30)
+      return {
+        ...prev,
+        [teamKey]: { ...prev[teamKey], score: team.score },
       }
     })
   }
 
   const teamsMap = Object.entries(teams).filter(([_, team]) => team.name !== "")
-
   return (
     <>
       {!gameStarted ? (
         <InitialScreen startGame={startGame} limit={limit} />
       ) : (
         <View style={{ alignItems: "center", flex: 1, paddingHorizontal: 5 }}>
-          <ConfirmationAlert
-            message="Seguro que desea terminar este juego?"
-            actionAcceptText="Terminar"
-            buttonText="Terminar juego"
-            actionAccept={endGame}
-          />
+          <View style={{ flexDirection: "row", gap: 10 }}>
+            <ConfirmationAlert
+              message="Seguro que desea terminar este juego?"
+              actionAcceptText="Terminar"
+              buttonText="Terminar"
+              actionAccept={endGame}
+            />
+            <ConfirmationAlert
+              message="Reiniciar el juego con los mismos jugadores?"
+              actionAcceptText="Reiniciar"
+              buttonText="Reiniciar"
+              actionAccept={restartGame}
+              disabled={teamWithMostPoints() === undefined}
+            />
+          </View>
           <Separator className="my-4" />
 
           <View
             style={{
               width: "100%",
               flexDirection: "row",
-              justifyContent: "space-evenly",
+              justifyContent: "space-around",
               alignItems: "center",
             }}
           >
             {teamsMap.map(([key, team]) => (
               <InputDialog
+                onLongPress={addScoreWhenAllPassed}
+                wins={team.wins}
                 key={key}
                 disbled={winner !== undefined}
                 limit={limit}
@@ -151,7 +190,6 @@ export default function IndexPage() {
             <View
               style={{
                 flexDirection: "row",
-                justifyContent: "space-between",
                 width: "100%",
               }}
             >

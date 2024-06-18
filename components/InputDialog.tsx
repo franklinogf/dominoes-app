@@ -26,21 +26,25 @@ const formSchema = z.object({
 type FormType = z.infer<typeof formSchema>
 interface InputDialogProps {
   actionAccept: (teamKey: TeamKeys, score: number) => void
+  onLongPress?: (teamKey: TeamKeys) => void
   team: TeamKeys
   label?: string
   labelClassName?: string
   buttonFullWitdh?: boolean
   limit: number
   disbled?: boolean
+  wins: number
 }
 export function InputDialog({
   actionAccept,
+  onLongPress,
   team,
   label,
   labelClassName,
   buttonFullWitdh,
   limit,
   disbled = false,
+  wins,
 }: InputDialogProps) {
   const [open, setOpen] = useState(false)
   const { control, handleSubmit, resetField } = useForm<FormType>({
@@ -49,7 +53,6 @@ export function InputDialog({
       score: 0,
     },
   })
-
   function onSubmit(data: FormType) {
     resetField("score")
     actionAccept(team, data.score)
@@ -63,12 +66,18 @@ export function InputDialog({
     >
       <AlertDialogTrigger asChild>
         <Button
+          onLongPress={() => {
+            onLongPress?.(team)
+          }}
           className="max-w-[100px] min-w-[85px]"
           disabled={disbled}
           onPress={() => {
             setOpen(true)
           }}
         >
+          <Text className="absolute top-1 right-1" style={{ fontSize: 20 }}>
+            {wins}
+          </Text>
           <Text className={cn("font-bold", labelClassName)}>{label}</Text>
         </Button>
       </AlertDialogTrigger>

@@ -11,6 +11,7 @@ export enum TeamsCount {
 export interface Team {
   name: string
   score: number[]
+  wins: number
 }
 
 export type Teams = Record<TeamKeys, Team>

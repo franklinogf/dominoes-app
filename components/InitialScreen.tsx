@@ -71,13 +71,14 @@ export function InitialScreen({
   function onSubmit(data: GameSchemaType) {
     // alert(JSON.stringify(data, null, 2))
     const teams: Teams = {
-      team1: { name: data.team1, score: [] },
-      team2: { name: data.team2, score: [] },
-      team3: { name: data.team3 ?? "", score: [] },
-      team4: { name: data.team4 ?? "", score: [] },
+      team1: { name: data.team1, score: [], wins: 0 },
+      team2: { name: data.team2, score: [], wins: 0 },
+      team3: { name: data.team3 ?? "", score: [], wins: 0 },
+      team4: { name: data.team4 ?? "", score: [], wins: 0 },
     }
     startGame(teams, data.limit)
   }
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <ScrollView bounces={false} showsVerticalScrollIndicator={false}>
