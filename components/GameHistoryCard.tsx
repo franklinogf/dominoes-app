@@ -23,7 +23,7 @@ export function GameHistoryCard({ game, deleteAction }: GameHistoryCardProps) {
     .filter(Boolean)
     .join(" VS ")
   const scores = [game.score1, game.score2, game.score3, game.score4]
-    .filter(Boolean)
+    .filter((score) => score !== null)
     .join(" - ")
   return (
     <Card key={game.id} className="w-full">
