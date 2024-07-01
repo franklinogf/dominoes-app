@@ -8,6 +8,7 @@ import { Separator } from "~/components/ui/separator"
 import { InputDialog } from "~/components/InputDialog"
 import { cn } from "~/lib/utils"
 import { H1, Small } from "~/components/ui/typography"
+import { useKeepAwake } from "expo-keep-awake"
 
 const initialTeamState: Teams = {
   team1: { name: "", score: [], wins: 0 },
@@ -20,6 +21,8 @@ function sumScores(scores: number[]) {
 }
 
 export default function IndexPage() {
+  useKeepAwake()
+
   const [teams, setTeams] = useState<Teams>(initialTeamState)
   const [gameStarted, setGameStarted] = useState(false)
   const [limit, setLimit] = useState<number>(200)
