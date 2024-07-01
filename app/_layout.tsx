@@ -1,7 +1,7 @@
 import { StatusBar } from "expo-status-bar"
 import { useMigrations } from "drizzle-orm/expo-sqlite/migrator"
 import migrations from "../drizzle/migrations"
-import { Text, View } from "react-native"
+import { AppState, Platform, Text, View } from "react-native"
 import { db } from "db/database"
 import { type Theme, ThemeProvider } from "@react-navigation/native"
 import "~/app/global.css"
@@ -12,6 +12,9 @@ import { useColorScheme } from "~/lib/useColorScheme"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { PortalHost } from "~/components/primitives/portal"
 import { ThemeToggle } from "~/components/ThemeToggle"
+import "~/lib/i18n"
+import { useTranslation } from "react-i18next"
+import { getLocales } from "expo-localization"
 
 // 181219
 const LIGHT_THEME: Theme = {
@@ -25,9 +28,23 @@ const DARK_THEME: Theme = {
 export { ErrorBoundary } from "expo-router"
 SplashScreen.preventAutoHideAsync()
 export default function AppLayout() {
+  const { i18n } = useTranslation()
   const { success, error } = useMigrations(db, migrations)
   const { colorScheme, setColorScheme, isDarkColorScheme } = useColorScheme()
   const [isColorSchemeLoaded, setIsColorSchemeLoaded] = useState(false)
+  useEffect(() => {
+    const subscription = AppState.addEventListener("change", (nextAppState) => {
+      if (Platform.OS === "android" && nextAppState === "active") {
+        const { languageCode } = getLocales()[0]
+        i18n.changeLanguage(languageCode ?? "en")
+      }
+    })
+
+    return () => {
+      subscription.remove()
+    }
+  }, [])
+
   useEffect(() => {
     ;(async () => {
       const theme = await AsyncStorage.getItem("theme")

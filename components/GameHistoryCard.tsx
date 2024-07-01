@@ -11,6 +11,7 @@ import { Trash } from "~/lib/icons/Trash"
 import { ConfirmationAlert } from "~/components/ConfirmationAlert"
 import { getLocales } from "expo-localization"
 import { type games } from "~/db/schema"
+import { useTranslation } from "react-i18next"
 type Game = typeof games.$inferSelect
 
 interface GameHistoryCardProps {
@@ -19,6 +20,7 @@ interface GameHistoryCardProps {
 }
 export function GameHistoryCard({ game, deleteAction }: GameHistoryCardProps) {
   const { languageCode } = getLocales()[0]
+  const { t } = useTranslation()
   const title = [game.team1, game.team2, game.team3, game.team4]
     .filter(Boolean)
     .join(" VS ")
@@ -38,19 +40,19 @@ export function GameHistoryCard({ game, deleteAction }: GameHistoryCardProps) {
       </CardHeader>
       <CardContent>
         <Text className="text-xl font-semibold text-center">
-          Ganador: {game[game.winner]}
+          {t("Ganador")}: {game[game.winner]}
         </Text>
         <Text className="text-xl font-semibold text-center">
-          Puntuación: {scores}
+          {t("Puntuación")}: {scores}
         </Text>
       </CardContent>
       <CardFooter>
         <ConfirmationAlert
-          buttonText="Borrar"
+          buttonText={t("Borrar")}
           buttonIcon={<Trash className="stroke-white" />}
           buttonFullWitdh
-          message="Seguro que quiere eliminarlo del historial?"
-          actionAcceptText="Borrar"
+          message={t("Seguro que quiere eliminarlo del historial?")}
+          actionAcceptText={t("Borrar")}
           actionAccept={deleteAction}
         />
       </CardFooter>

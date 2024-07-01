@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -33,6 +34,7 @@ export function ConfirmationAlert({
   buttonSize = "sm",
   disabled = false,
 }: ConfirmationAlertProps) {
+  const { t } = useTranslation()
   return (
     <AlertDialog className={cn({ "w-full": buttonFullWitdh })}>
       <AlertDialogTrigger asChild>
@@ -52,7 +54,7 @@ export function ConfirmationAlert({
         </AlertDialogHeader>
         <AlertDialogFooter className="flex-row justify-center gap-4">
           <AlertDialogCancel>
-            <Text>Cancelar</Text>
+            <Text>{t("Cancelar")}</Text>
           </AlertDialogCancel>
 
           <AlertDialogAction onPress={actionAccept}>

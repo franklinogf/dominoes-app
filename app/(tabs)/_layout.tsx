@@ -3,9 +3,11 @@ import FontAwesome from "@expo/vector-icons/FontAwesome"
 import { Tabs } from "expo-router"
 import { NAV_THEME } from "~/lib/constants"
 import { useColorScheme } from "~/lib/useColorScheme"
+import { useTranslation } from "react-i18next"
 
 export default function TabLayout() {
   const { isDarkColorScheme } = useColorScheme()
+  const { t } = useTranslation()
   return (
     <>
       <Tabs
@@ -30,7 +32,7 @@ export default function TabLayout() {
         <Tabs.Screen
           name="index"
           options={{
-            title: "Juego",
+            title: t("Juego"),
             tabBarIcon: ({ color }) => (
               <FontAwesome size={26} name="gamepad" color={color} />
             ),
@@ -39,7 +41,7 @@ export default function TabLayout() {
         <Tabs.Screen
           name="history"
           options={{
-            title: "Historial",
+            title: t("Historial"),
             tabBarIcon: ({ color }) => (
               <FontAwesome size={24} name="history" color={color} />
             ),

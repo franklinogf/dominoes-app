@@ -19,6 +19,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import type { TeamKeys } from "~/lib/types"
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 
 const formSchema = z.object({
   score: z.coerce.number().min(1, { message: "No puede dejarlo vacío" }),
@@ -53,6 +54,7 @@ export function InputDialog({
       score: 0,
     },
   })
+  const { t } = useTranslation()
   function onSubmit(data: FormType) {
     resetField("score")
     actionAccept(team, data.score)
@@ -83,7 +85,7 @@ export function InputDialog({
       <AlertDialogContent className="w-full max-w-sm">
         <AlertDialogHeader>
           <AlertDialogTitle className="text-center">
-            Agregar puntuación
+            {t("Agregar puntuación")}
           </AlertDialogTitle>
         </AlertDialogHeader>
         <View>
@@ -95,7 +97,9 @@ export function InputDialog({
             maxLength={3}
             keyboardType="number-pad"
           />
-          <Small className="text-muted-foreground">Limite: {limit}</Small>
+          <Small className="text-muted-foreground">
+            {t("Limite")}: {limit}
+          </Small>
         </View>
         <AlertDialogFooter className="flex-row justify-center gap-8">
           <AlertDialogCancel
@@ -104,10 +108,10 @@ export function InputDialog({
               setOpen(false)
             }}
           >
-            <Text>Cancelar</Text>
+            <Text>{t("Cancelar")}</Text>
           </AlertDialogCancel>
           <AlertDialogAction onPress={handleSubmit(onSubmit)}>
-            <Text>Aceptar</Text>
+            <Text>{t("Aceptar")}</Text>
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

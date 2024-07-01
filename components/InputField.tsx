@@ -11,6 +11,7 @@ import {
 } from "react-hook-form"
 import { Small } from "./ui/typography"
 import { Text } from "./ui/text"
+import { useTranslation } from "react-i18next"
 
 interface InputFieldProps<TFormValues extends FieldValues>
   extends TextInputProps {
@@ -26,6 +27,7 @@ export const InputField = <TFormValues extends Record<string, any>>({
   className,
   ...props
 }: InputFieldProps<TFormValues>) => {
+  const { t } = useTranslation()
   return (
     <Controller
       control={control}
@@ -52,9 +54,9 @@ export const InputField = <TFormValues extends Record<string, any>>({
             {...props}
             className={cn(className, { "border-red-500": invalid })}
           />
-          {error && (
+          {error?.message && (
             <Small className="text-muted-foreground mt-2">
-              {error.message}
+              {t(error.message)}
             </Small>
           )}
         </View>

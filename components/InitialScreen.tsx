@@ -15,7 +15,6 @@ import { type Teams, TeamsCount } from "~/lib/types"
 import { useColorScheme } from "~/lib/useColorScheme"
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group"
 import { Label } from "./ui/label"
-// import { useRef } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import {
@@ -26,10 +25,10 @@ import {
 } from "~/formSchemas/gameSchema"
 import { useState } from "react"
 import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group"
+import { useTranslation } from "react-i18next"
 
 interface InitialScreenProps {
   startGame: (teams: Teams, limit: number) => void
-  // teamsNames: Teams
   limit: number
 }
 const styles = StyleSheet.create({
@@ -41,11 +40,8 @@ const styles = StyleSheet.create({
   },
   toggleGroupItemText: { fontSize: 24, paddingTop: 6, color: "black" },
 })
-export function InitialScreen({
-  startGame,
-  // teamsNames,
-  limit,
-}: InitialScreenProps) {
+export function InitialScreen({ startGame, limit }: InitialScreenProps) {
+  const { t } = useTranslation()
   const { isDarkColorScheme } = useColorScheme()
   const dominoesIcon = isDarkColorScheme ? lightIcon : darkicon
   const [teamsCount, setTeamsCount] = useState<TeamsCount>(TeamsCount.TwoTeams)
@@ -100,14 +96,16 @@ export function InitialScreen({
           </View>
           <View className="my-4">
             <Text className="text-3xl font-bold">
-              Nombres de los{" "}
-              {teamsCount === TeamsCount.TwoTeams ? "equipos" : "jugadores"}
+              {t("Nombres de los")}{" "}
+              {teamsCount === TeamsCount.TwoTeams
+                ? t("equipos")
+                : t("jugadores")}
             </Text>
           </View>
           <View className="w-full mb-2">
             <ToggleGroup
               className="w-full"
-              value={teamsCount.toString()}
+              value={teamsCount}
               onValueChange={(val) => {
                 if (val === undefined) return
                 setTeamsCount(val as TeamsCount)
@@ -117,7 +115,7 @@ export function InitialScreen({
               <ToggleGroupItem
                 style={styles.toggleGroupItem}
                 value={TeamsCount.TwoTeams}
-                aria-label="Tres equipos"
+                aria-label={t("Dos equipos")}
               >
                 <Text style={styles.toggleGroupItemText}>
                   {TeamsCount.TwoTeams}
@@ -126,7 +124,7 @@ export function InitialScreen({
               <ToggleGroupItem
                 style={styles.toggleGroupItem}
                 value={TeamsCount.ThreeTeams}
-                aria-label="Tres equipos"
+                aria-label={t("Tres equipos")}
               >
                 <Text style={styles.toggleGroupItemText}>
                   {TeamsCount.ThreeTeams}
@@ -136,7 +134,7 @@ export function InitialScreen({
               <ToggleGroupItem
                 style={styles.toggleGroupItem}
                 value={TeamsCount.FourTeams}
-                aria-label="Cuatro Equipos"
+                aria-label={t("Cuatro Equipos")}
               >
                 <Text style={styles.toggleGroupItemText}>
                   {TeamsCount.FourTeams}
@@ -153,7 +151,9 @@ export function InitialScreen({
               maxLength={15}
               autoCapitalize="words"
               label={
-                teamsCount === TeamsCount.TwoTeams ? "Equipo 1" : "Jugador 1"
+                teamsCount === TeamsCount.TwoTeams
+                  ? t("Equipo") + " 1"
+                  : t("Jugador") + " 1"
               }
               onSubmitEditing={() => {
                 // if (team2InputRef.current) {
@@ -170,7 +170,9 @@ export function InitialScreen({
               maxLength={15}
               autoCapitalize="words"
               label={
-                teamsCount === TeamsCount.TwoTeams ? "Equipo 2" : "Jugador 2"
+                teamsCount === TeamsCount.TwoTeams
+                  ? t("Equipo") + " 2"
+                  : t("Jugador") + " 2"
               }
               // ref={team2InputRef}
               blurOnSubmit={false}
@@ -186,7 +188,7 @@ export function InitialScreen({
                 returnKeyType="done"
                 maxLength={15}
                 autoCapitalize="words"
-                label="Jugador 3"
+                label={`${t("Jugador")} 3`}
                 blurOnSubmit={false}
                 onSubmitEditing={() => {
                   Keyboard.dismiss()
@@ -200,7 +202,7 @@ export function InitialScreen({
                 returnKeyType="done"
                 maxLength={15}
                 autoCapitalize="words"
-                label="Jugador 4"
+                label={`${t("Jugador")} 4`}
                 blurOnSubmit={false}
                 onSubmitEditing={() => {
                   Keyboard.dismiss()
@@ -209,7 +211,9 @@ export function InitialScreen({
             )}
 
             <View className="my-4">
-              <Text className="mb-4">Selecciona el limite de la partida</Text>
+              <Text className="mb-4">
+                {t("Selecciona el limite de la partida")}
+              </Text>
               <Controller
                 control={control}
                 name="limit"
@@ -241,7 +245,7 @@ export function InitialScreen({
               size="lg"
               onPress={handleSubmit(onSubmit)}
             >
-              <Text>Continuar</Text>
+              <Text>{t("Continuar")}</Text>
             </Button>
           </View>
         </View>

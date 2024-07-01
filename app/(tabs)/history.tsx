@@ -9,10 +9,12 @@ import { usePathname } from "expo-router"
 import { GameHistoryCard } from "~/components/GameHistoryCard"
 import { Text } from "~/components/ui/text"
 import { ConfirmationAlert } from "~/components/ConfirmationAlert"
+import { useTranslation } from "react-i18next"
 type Game = typeof games.$inferSelect
 export default function HistoryPage() {
   const pathname = usePathname()
   const [games, setGames] = useState<Game[]>([])
+  const { t } = useTranslation()
 
   const getGames = async () => {
     const result = await getAllGames()
@@ -36,12 +38,12 @@ export default function HistoryPage() {
   return (
     <View>
       <View className="pb-2 items-center gap-2">
-        <H1 className="text-center">Historial</H1>
+        <H1 className="text-center">{t("Historial")}</H1>
         <ConfirmationAlert
-          buttonText="Borrar todo el historial"
+          buttonText={t("Borrar todo el historial")}
           actionAccept={handleDeleteAllGamesButton}
-          actionAcceptText="Borrar todo"
-          message="Desea borrar todo el historial?"
+          actionAcceptText={t("Borrar todo")}
+          message={t("Seguro que quiere borrar todo el historial?")}
         />
       </View>
       <FlatList
@@ -66,7 +68,7 @@ export default function HistoryPage() {
               }}
             >
               <Text style={{ fontSize: 18 }}>
-                Aun no tienes historial, juega una partida
+                {t("Aun no tienes historial, juega una partida")}
               </Text>
             </View>
           )

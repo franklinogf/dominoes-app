@@ -9,6 +9,7 @@ import { InputDialog } from "~/components/InputDialog"
 import { cn } from "~/lib/utils"
 import { H1, Small } from "~/components/ui/typography"
 import { useKeepAwake } from "expo-keep-awake"
+import { useTranslation } from "react-i18next"
 
 const initialTeamState: Teams = {
   team1: { name: "", score: [], wins: 0 },
@@ -22,7 +23,7 @@ function sumScores(scores: number[]) {
 
 export default function IndexPage() {
   useKeepAwake()
-
+  const { t } = useTranslation()
   const [teams, setTeams] = useState<Teams>(initialTeamState)
   const [gameStarted, setGameStarted] = useState(false)
   const [limit, setLimit] = useState<number>(200)
@@ -141,6 +142,7 @@ export default function IndexPage() {
   }
 
   const teamsMap = Object.entries(teams).filter(([_, team]) => team.name !== "")
+
   return (
     <>
       {!gameStarted ? (
@@ -149,15 +151,15 @@ export default function IndexPage() {
         <View style={{ alignItems: "center", flex: 1, paddingHorizontal: 5 }}>
           <View style={{ flexDirection: "row", gap: 10 }}>
             <ConfirmationAlert
-              message="Seguro que desea terminar este juego?"
-              actionAcceptText="Terminar"
-              buttonText="Terminar"
+              message={t("Seguro que desea terminar este juego?")}
+              actionAcceptText={t("Terminar")}
+              buttonText={t("Terminar")}
               actionAccept={endGame}
             />
             <ConfirmationAlert
-              message="Reiniciar el juego con los mismos jugadores?"
-              actionAcceptText="Reiniciar"
-              buttonText="Reiniciar"
+              message={t("Reiniciar el juego con los mismos jugadores?")}
+              actionAcceptText={t("Reiniciar")}
+              buttonText={t("Reiniciar")}
               actionAccept={restartGame}
               disabled={teamWithMostPoints() === undefined}
             />
@@ -224,8 +226,8 @@ export default function IndexPage() {
                             }
                             buttonVariant="outline"
                             buttonSize="lg"
-                            message="Desea borrarlo?"
-                            actionAcceptText="Borrar"
+                            message={t("Desea borrarlo?")}
+                            actionAcceptText={t("Borrar")}
                             buttonText={score.toString()}
                             actionAccept={() => {
                               removeScore(teamKey, index)
@@ -264,7 +266,9 @@ export default function IndexPage() {
                     {totalScore}
                   </H1>
                   {winner === key ? (
-                    <Small className={"font-bold text-green-500"}>Winner</Small>
+                    <Small className={"font-bold text-green-500"}>
+                      {t("Ganador")}
+                    </Small>
                   ) : (
                     <Small className="text-center text-muted-foreground">
                       {limit - totalScore}
